@@ -21,11 +21,16 @@ Pro testovací i produkční verzi byla zvolena **Možnost A (Netlify / Vercel)*
 ## Git a verzování
 
 * **Repozitář:** Lokální repozitář v `c:\GitHub\Renata-web\`.
+* **GitHub Repozitář:** [ariael/Renata-web](https://github.com/ariael/Renata-web)
 * **Větvící model:**
-  * `main` - produkční kód, stabilní verze připravená k nasazení.
-  * Vývojové větve (pokud je potřeba) se větví z `main`.
+  * `master` (výchozí) - produkční kód, stabilní verze připravená k nasazení.
 * **Deployment workflow:**
   1. Lokální úpravy a otestování (`npm run dev`).
   2. Vytvoření buildu (`npm run build`) pro ověření chyb v kompilaci a TypeScriptu.
-  3. Commit a Push do vzdáleného repozitáře (bude nastaven GitHub/GitLab dle přání uživatele).
-  4. Automatický build a deployment na straně hostingu.
+  3. Commit a Push do vzdáleného repozitáře (`git push origin master`).
+  4. Automatický build a deployment na straně hostingu (Netlify / Vercel).
+
+### Postup pro první nasazení (Deployment)
+Pro okamžité nasazení a spuštění projektu na internetu stačí kliknout na jeden z následujících odkazů, který automaticky naimportuje a zprovozní web pod vaším účtem:
+* **[Nasadit na Vercel (1-Click)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fariael%2FRenata-web)**
+* **[Nasadit na Netlify (1-Click)](https://app.netlify.com/start/deploy?repository=https%3A%2F%2Fgithub.com%2Fariael%2FRenata-web)**
