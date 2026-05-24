@@ -21,7 +21,7 @@ collections:
       - { label: "Obrázek", name: "image", widget: "image" }
       - { label: "Stručný popis", name: "shortDesc", widget: "text" }
       - { label: "Dlouhý popis", name: "longDesc", widget: "markdown" }
-      - { label: "Výhody (jeden řádek = jedna výhoda)", name: "benefits", widget: "list", field: { widget: "string" } }
+      - { label: "Výhody (jeden řádek = jedna výhoda)", name: "benefits", widget: "list", field: { label: "Výhoda", name: "benefit", widget: "string" } }
       - { label: "Kontraindikace", name: "contraindications", widget: "text" }
       - { label: "Pořadí zobrazení", name: "sortOrder", widget: "number", value_type: "int" }
 
