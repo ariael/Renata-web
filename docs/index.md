@@ -14,6 +14,8 @@ Podle globálních pravidel je dokumentace rozdělena do několika přehledných
    * Kompletní textové podklady o procedurách (Gua Sha, baňkování, bukální masáže, aurikuloterapie) a schválený ceník.
 4. **[Konfigurace a secrets (docs/secrets.md)](file:///c:/GitHub/Renata-web/docs/secrets.md)** (Ignorováno v Gitu)
    * Šablona pro API klíče, přihlašovací údaje a citlivé konfigurace.
+5. **[Správa obsahu a CMS (docs/cms.md)](file:///c:/GitHub/Renata-web/docs/cms.md)**
+   * Návod pro nastavení a používání bezserverového redakčního systému Decap CMS.
 
 ---
 

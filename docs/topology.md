@@ -13,7 +13,7 @@ Pro testovací i produkční verzi byla zvolena **Možnost A (Netlify / Vercel)*
 
 ### Produkční verze (Production)
 * **Doména:** `www.naturelift.help` / `naturelift.help`
-* **DNS a Registrátor:** Bude upřesněno klientem. Doména bude nasměrována pomocí CNAME / ALIAS záznamů na hosting Netlify/Vercel.
+* **DNS a Registrátor:** Porkbun (porkbun.com). Doména bude nasměrována pomocí CNAME / ALIAS záznamů (nebo NS záznamů) na hosting Netlify/Vercel.
 * **SSL Certifikát:** Let's Encrypt (automaticky spravovaný a obnovovaný hostingovou platformou, HTTPS vynuceno).
 
 ---

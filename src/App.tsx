@@ -1,103 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css'
-
-// Import assets
-import heroBgImg from './assets/hero_bg.png'
-import guaShaImg from './assets/gua_sha_treatment.png'
-import buccalMassageImg from './assets/buccal_massage.png'
-import auriculotherapyImg from './assets/auriculotherapy.png'
-
-interface Service {
-  id: string
-  title: string
-  tagline: string
-  duration: string
-  price: string
-  image: string
-  shortDesc: string
-  longDesc: string
-  benefits: string[]
-  contraindications: string
-}
-
-const SERVICES_DATA: Service[] = [
-  {
-    id: 'buccal',
-    title: 'Bukální masáž obličeje',
-    tagline: 'Neinvazivní omlazení & modelování',
-    duration: '75 min',
-    price: '1 800 Kč',
-    image: buccalMassageImg,
-    shortDesc: 'Hloubková intraorální masáž svalů a fascií obličeje, krku a dekoltu. Unikátní ošetření zvenčí i zevnitř úst pro okamžitý lifting.',
-    longDesc: 'Bukální masáž (skulpturálně-intraorální lifting) patří mezi nejúčinnější neinvazivní omlazující techniky obličeje a krku. Ošetření probíhá ve dvou fázích: první fáze probíhá zvenčí na dekoltu, krku a obličeji; druhá fáze probíhá uvnitř úst (s použitím jednorázových sterilních rukavic). Tímto způsobem terapeut uvolní i hluboko uložené napjaté svaly, zejména v oblasti čelistí, což zmírňuje chronické napětí a redukuje vrásky.',
-    benefits: [
-      'Redukuje povislé kontury obličeje a zmenšuje dvojitou bradu',
-      'Obnovuje přirozenou pružnost, tonus a pevnost pleti',
-      'Uvolňuje napětí obličejových svalů (ideální při stresu a skřípání zubů - bruxismu)',
-      'Podporuje intenzivní lymfatickou drenáž a redukuje otoky',
-      'Vyhlazuje nasolabiální záhyby a vrásky kolem úst',
-      'Zabraňuje poklesu koutků úst'
-    ],
-    contraindications: 'Akutní záněty či rány v ústní dutině, afty, herpes, čerstvé stomatologické zákroky, nedávné estetické zákroky (aplikace nití, botoxu či výplní - odstup min. 4–6 týdnů).'
-  },
-  {
-    id: 'guasha',
-    title: 'Masáž Gua Sha',
-    tagline: 'Tradiční čínský rituál omlazení',
-    duration: '60 min',
-    price: '1 200 Kč',
-    image: guaShaImg,
-    shortDesc: 'Vysoce relaxační ošetření nefritovými kameny stimulující tvorbu kolagenu a lymfatický oběh pro zářivou a vyžehlenou pleť.',
-    longDesc: 'Gua Sha je tradiční čínská terapeutická metoda stará více než 2000 let. Používáním speciálně tvarovaných destiček z polodrahokamů (nejčastěji nefritu nebo růženínu) jemnými tahy masírujeme pokožku obličeje podél energetických drah. Masáž aktivuje fascie, rozproudí lymfatický oběh, čistí tkáně od toxinů a přirozeně stimuluje produkci vlastního kolagenu a elastinu.',
-    benefits: [
-      'Zajišťuje vyšší tvorbu kolagenu a elastinu',
-      'Zvyšuje pružnost a zářivost pleti (tzv. "vyžehlený vzhled")',
-      'Odstraňuje otoky a váčky pod očima',
-      'Zlepšuje mikrocirkulaci a výživu kožních buněk',
-      'Uvolňuje napětí v oblasti čela, obočí a spánků'
-    ],
-    contraindications: 'Akutní akné, zánětlivá onemocnění kůže v obličeji, popáleniny od slunce, otevřené ranky, křečové žíly nebo křehké cévky v obličeji.'
-  },
-  {
-    id: 'cupping',
-    title: 'Baňkování obličeje',
-    tagline: 'Hloubkové prokrvení & zpevnění',
-    duration: '45 min',
-    price: '1 100 Kč',
-    image: heroBgImg,
-    shortDesc: 'Neinvazivní ošetření speciálními baňkami, které prokrvuje pokožku do hloubky, odstraňuje svalové blokády a čistí póry.',
-    longDesc: 'Baňkování obličeje (facial cupping) využívá jemné podtlakové baňky navržené speciálně pro citlivou pokožku obličeje a dekoltu. Podtlak stimuluje krevní oběh v nejhlubších vrstvách kůže, okysličuje tkáně a urychluje odvod metabolických odpadů lymfatickým systémem. V kombinaci s Gua Sha masáží dosahuje mimořádně zpevňujících výsledků.',
-    benefits: [
-      'Hloubkově čistí pleť a zabraňuje rozšiřování pórů',
-      'Prokrvuje obličej v hlubších vrstvách pokožky',
-      'Zlepšuje elasticitu pokožky a stimuluje regenerační procesy',
-      'Zanechává pleť zpevněnou, hladkou a odpočatou'
-    ],
-    contraindications: 'Křehké cévky (kuperóza), tenká a velmi citlivá pleť, akutní kožní záněty, čerstvé jizvy nebo výplně.'
-  },
-  {
-    id: 'auriculo',
-    title: 'Aurikuloterapie',
-    tagline: 'Harmonizace těla přes body na uchu',
-    duration: '45 min',
-    price: '800 Kč',
-    image: auriculotherapyImg,
-    shortDesc: 'Jemná ušní akupresura s využitím magnetických kuliček pro nastartování přirozené regenerace a psychické i fyzické rovnováhy.',
-    longDesc: 'Aurikuloterapie (ušní akupunktura/akupresura) je uznávaná metoda tradiční čínské medicíny (TCM). Ušní boltec představuje mikrosystém celého lidského těla. Stimulací specifických bodů na uchu (pomocí neinvazivních drobných magnetických kuliček nebo semínek vaccaria, které se na uchu nechávají působit několik dní) dochází k harmonizaci funkcí vnitřních orgánů, nervové soustavy a zmírnění potíží v celém těle.',
-    benefits: [
-      'Pomáhá při stresu, úzkostech a psychickém vyčerpání',
-      'Zlepšuje kvalitu spánku, pomáhá při nespavosti a únavě',
-      'Uvolňuje bolesti hlavy, zad a pohybového aparátu',
-      'Podporuje metabolismus, hubnutí a zvládání chutí',
-      'Pomáhá při odvykání kouření a harmonizuje trávení'
-    ],
-    contraindications: 'Těhotenství (některé body jsou kontraindikovány), akutní zánět nebo poranění ušního boltce, kovové alergie (pokud se používají magnetické kuličky).'
-  }
-]
+import type { Service, HomepageSettings } from './fallbackData'
+import { 
+  SERVICES_FALLBACK_DATA, 
+  HOMEPAGE_SETTINGS_FALLBACK 
+} from './fallbackData'
+import { fetchServices, fetchHomepageSettings } from './cmsClient'
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeService, setActiveService] = useState<Service | null>(null)
+  const [services, setServices] = useState<Service[]>(SERVICES_FALLBACK_DATA)
+  const [settings, setSettings] = useState<HomepageSettings>(HOMEPAGE_SETTINGS_FALLBACK)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -107,6 +21,17 @@ export default function App() {
     message: ''
   })
   const [formSubmitted, setFormSubmitted] = useState(false)
+
+  useEffect(() => {
+    async function loadCMSData() {
+      const cmsServices = await fetchServices()
+      setServices(cmsServices)
+      
+      const cmsSettings = await fetchHomepageSettings()
+      setSettings(cmsSettings)
+    }
+    loadCMSData()
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -141,7 +66,7 @@ export default function App() {
         <div className="container nav-container">
           <a href="#" className="logo-link" onClick={closeMenu}>
             <span className="logo-title">NatureLift</span>
-            <span className="logo-subtitle">Renata Tomášová</span>
+            <span className="logo-subtitle">{settings.contactName}</span>
           </a>
 
           <button className="menu-toggle" onClick={toggleMenu} aria-label="Menu">
@@ -185,12 +110,9 @@ export default function App() {
       <section className="hero-section">
         <div className="container">
           <div className="hero-content">
-            <span className="hero-tagline">Přírodní omlazení v Poděbradech</span>
-            <h1>Cesta k přirozené kráse, zdraví a harmonii</h1>
-            <p>
-              Objevte vysoce účinné terapeutické techniky inspirované tradiční čínskou medicínou a přirozenou regenerací těla. 
-              Navraťte své pleti mladistvý vzhled a uvolněte mysl.
-            </p>
+            <span className="hero-tagline">{settings.heroTagline}</span>
+            <h1>{settings.heroTitle}</h1>
+            <p>{settings.heroDescription}</p>
             <div className="hero-buttons">
               <a href="#rezervace" className="btn btn-primary">Rezervovat ošetření</a>
               <a href="#sluzby" className="btn btn-outline">Naše služby</a>
@@ -204,29 +126,18 @@ export default function App() {
         <div className="container">
           <div className="grid grid-2 about-grid">
             <div className="about-image-wrapper">
-              <img src={guaShaImg} alt="Renata Tomášová - NatureLift" className="about-image" />
+              <img src={services.find(s => s.id === 'guasha')?.image || services[0]?.image} alt={`${settings.contactName} - NatureLift`} className="about-image" />
               <div className="about-badge">
                 <div className="about-badge-num">TCM</div>
                 <div className="about-badge-text">Tradiční čínské metody</div>
               </div>
             </div>
             <div className="about-content">
-              <h2>O mně</h2>
-              <p>
-                Jmenuji se <strong>Renata Tomášová</strong> a pomáhám lidem nacházet cestu zpět k jejich přirozené kráse, zdraví a vnitřní rovnováze. 
-                Při své práci se specializuji na neinvazivní omlazující techniky obličeje a na jemné harmonizační metody tradiční čínské medicíny.
-              </p>
-              <p>
-                Věřím, že stav naší pokožky je zrcadlem našeho vnitřního zdraví a psychické pohody. Proto ke každému klientovi přistupuji 
-                s maximální citlivostí, respektem a individuální péčí přizpůsobenou konkrétním potřebám jeho těla i mysli.
-              </p>
-              <div className="about-quote">
-                „Krása nevzniká na povrchu, ale pramení z hlubokého uvolnění napětí a harmonie celého těla.“
-              </div>
-              <p style={{ marginBottom: 0 }}>
-                Přijďte si dopřát chvíli péče do salonu v Poděbradech, kde zažijete hlubokou relaxaci obličejových svalů, 
-                oživíte povadlé fascie a podpoříte celkovou vitalitu organismu.
-              </p>
+              <h2>{settings.aboutTitle}</h2>
+              <p>{settings.aboutText1}</p>
+              <p>{settings.aboutText2}</p>
+              <div className="about-quote">{settings.aboutQuote}</div>
+              <p style={{ marginBottom: 0 }}>{settings.aboutText3}</p>
             </div>
           </div>
         </div>
@@ -244,7 +155,7 @@ export default function App() {
           </div>
 
           <div className="grid grid-2">
-            {SERVICES_DATA.map((service) => (
+            {services.map((service) => (
               <div className="service-card" key={service.id}>
                 <div className="service-image-container">
                   <img src={service.image} alt={service.title} />
@@ -284,16 +195,10 @@ export default function App() {
           <div className="why-section">
             <div className="grid grid-2 why-grid">
               <div>
-                <h2>Co se děje s naším obličejem, když stárneme?</h2>
-                <p>
-                  Mladý obličej má pevné svaly, neporušené fascie, dobře fungující tok lymfy a pružné cévky. Čím jsme starší, tím větší podporu od nás naše pleť potřebuje.
-                </p>
-                <p>
-                  Chronické napětí se hromadí zejména v čelistech, kolem rtů a na čele, což vede k vzniku hlubokých vrásek. Postupně klesá hustota kostí, ochabuje svalstvo a dochází k poklesu kontur obličeje. Lymfatický oběh se zpomaluje, což způsobuje ranní otoky a nezdravý tón pleti.
-                </p>
-                <p style={{ marginBottom: 0 }}>
-                  Naše přirozené, neinvazivní omlazující techniky (Gua Sha, baňkování, bukální masáže) působí v nejhlubších vrstvách kůže, svalů i pojivových tkání. Oživují zanedbané oblasti a spouští ozdravné procesy celého organismu.
-                </p>
+                <h2>{settings.whyTitle}</h2>
+                <p>{settings.whyDescription1}</p>
+                <p>{settings.whyDescription2}</p>
+                <p style={{ marginBottom: 0 }}>{settings.whyDescription3}</p>
               </div>
               <div className="grid grid-2" style={{ gap: '1.5rem' }}>
                 <div className="why-card">
@@ -302,8 +207,8 @@ export default function App() {
                       <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                     </svg>
                   </div>
-                  <h4>Aktivace kolagenu</h4>
-                  <p>Hloubková masáž stimuluje fibroblasty k tvorbě nového kolagenu a elastinu pro zpevnění pleti.</p>
+                  <h4>{settings.card1Title}</h4>
+                  <p>{settings.card1Desc}</p>
                 </div>
                 <div className="why-card">
                   <div className="why-icon">
@@ -311,8 +216,8 @@ export default function App() {
                       <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                     </svg>
                   </div>
-                  <h4>Lymfatický odtok</h4>
-                  <p>Uvolněním napjatých fascií rozproudíme tok lymfy, což eliminuje otoky a vyčistí pokožku.</p>
+                  <h4>{settings.card2Title}</h4>
+                  <p>{settings.card2Desc}</p>
                 </div>
                 <div className="why-card">
                   <div className="why-icon">
@@ -320,8 +225,8 @@ export default function App() {
                       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                     </svg>
                   </div>
-                  <h4>Uvolnění stresu</h4>
-                  <p>Jemná stimulace bodů na uchu a uvolnění čelistního napětí působí blahodárně na celou psychiku.</p>
+                  <h4>{settings.card3Title}</h4>
+                  <p>{settings.card3Desc}</p>
                 </div>
                 <div className="why-card">
                   <div className="why-icon">
@@ -330,8 +235,8 @@ export default function App() {
                       <path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" />
                     </svg>
                   </div>
-                  <h4>Bez jehel a chemie</h4>
-                  <p>Stoprocentně přírodní, neinvazivní ošetření bez rizika vedlejších účinků či nepřirozeného vzhledu.</p>
+                  <h4>{settings.card4Title}</h4>
+                  <p>{settings.card4Desc}</p>
                 </div>
               </div>
             </div>
@@ -343,15 +248,12 @@ export default function App() {
       <section id="cenik" className="section section-bg">
         <div className="container">
           <div className="text-center pricing-intro">
-            <h2>Ceník služeb</h2>
-            <p>
-              Investice do vašeho zdraví, krásy a harmonie. Dopřejte si prémiovou péči, kterou si vaše pleť zaslouží. 
-              Při zakoupení balíčku více ošetření nabízíme individuální ceny.
-            </p>
+            <h2>{settings.pricingTitle}</h2>
+            <p>{settings.pricingDesc}</p>
           </div>
 
           <div className="pricing-table-container">
-            {SERVICES_DATA.map((service) => (
+            {services.map((service) => (
               <div className="pricing-row" key={service.id}>
                 <div className="pricing-info">
                   <div className="pricing-title">{service.title}</div>
@@ -363,16 +265,18 @@ export default function App() {
                 </div>
               </div>
             ))}
-            <div className="pricing-row">
-              <div className="pricing-info">
-                <div className="pricing-title">Kombinované ošetření (Gua Sha + Baňkování)</div>
-                <div className="pricing-desc">Intenzivní omlazující a zpevňující kúra pro náročné</div>
+            {!services.some(s => s.id === 'kombi') && (
+              <div className="pricing-row">
+                <div className="pricing-info">
+                  <div className="pricing-title">Kombinované ošetření (Gua Sha + Baňkování)</div>
+                  <div className="pricing-desc">Intenzivní omlazující a zpevňující kúra pro náročné</div>
+                </div>
+                <div className="pricing-meta">
+                  <div className="pricing-time">90 min</div>
+                  <div className="pricing-price">2 100 Kč</div>
+                </div>
               </div>
-              <div className="pricing-meta">
-                <div className="pricing-time">90 min</div>
-                <div className="pricing-price">2 100 Kč</div>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -383,11 +287,8 @@ export default function App() {
           <div className="grid grid-2 contact-grid">
             {/* Contact Info */}
             <div className="contact-info-card">
-              <h2 className="contact-info-title">Kontakt</h2>
-              <p>
-                Pokud máte jakékoliv dotazy k nabízeným procedurám nebo kontraindikacím, neváhejte mě kontaktovat. 
-                Ráda vám poradím a pomohu vybrat ošetření na míru.
-              </p>
+              <h2 className="contact-info-title">{settings.contactTitle}</h2>
+              <p>{settings.contactDesc}</p>
 
               <div className="contact-list">
                 <div className="contact-item">
@@ -399,7 +300,7 @@ export default function App() {
                   </div>
                   <div>
                     <div className="contact-item-title">Terapeut</div>
-                    <div className="contact-item-val">Renata Tomášová</div>
+                    <div className="contact-item-val">{settings.contactName}</div>
                   </div>
                 </div>
 
@@ -412,7 +313,7 @@ export default function App() {
                   </div>
                   <div>
                     <div className="contact-item-title">Kde mě najdete</div>
-                    <div className="contact-item-val">Poděbrady</div>
+                    <div className="contact-item-val">{settings.contactAddress}</div>
                   </div>
                 </div>
 
@@ -425,7 +326,7 @@ export default function App() {
                   <div>
                     <div className="contact-item-title">Telefon</div>
                     <div className="contact-item-val">
-                      <a href="tel:+420733783125">+420 733 783 125</a>
+                      <a href={`tel:${settings.contactPhone.replace(/\s+/g, '')}`}>{settings.contactPhone}</a>
                     </div>
                   </div>
                 </div>
@@ -440,7 +341,7 @@ export default function App() {
                   <div>
                     <div className="contact-item-title">Email</div>
                     <div className="contact-item-val">
-                      <a href="mailto:renata.tomasova@seznam.cz">renata.tomasova@seznam.cz</a>
+                      <a href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a>
                     </div>
                   </div>
                 </div>
@@ -519,11 +420,14 @@ export default function App() {
                       onChange={handleInputChange}
                     >
                       <option value="">Vyberte ošetření...</option>
-                      <option value="bukal">Bukální masáž (75 min / 1 800 Kč)</option>
-                      <option value="guasha">Masáž Gua Sha (60 min / 1 200 Kč)</option>
-                      <option value="cupping">Baňkování obličeje (45 min / 1 100 Kč)</option>
-                      <option value="auriculo">Aurikuloterapie (45 min / 800 Kč)</option>
-                      <option value="kombi">Kombinované ošetření (90 min / 2 100 Kč)</option>
+                      {services.map((s) => (
+                        <option key={s.id} value={s.id}>
+                          {s.title} ({s.duration} / {s.price})
+                        </option>
+                      ))}
+                      {!services.some(s => s.id === 'kombi') && (
+                        <option value="kombi">Kombinované ošetření (90 min / 2 100 Kč)</option>
+                      )}
                     </select>
                   </div>
                   <div className="form-group">
@@ -573,7 +477,7 @@ export default function App() {
       <footer>
         <div className="container">
           <div className="footer-logo">NatureLift</div>
-          <div className="footer-subtitle">Renata Tomášová</div>
+          <div className="footer-subtitle">{settings.contactName}</div>
           <ul className="footer-nav">
             <li><a href="#omne">O mně</a></li>
             <li><a href="#sluzby">Služby</a></li>

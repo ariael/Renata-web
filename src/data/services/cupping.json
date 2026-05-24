@@ -1,0 +1,18 @@
+{
+  "id": "cupping",
+  "title": "Baňkování obličeje",
+  "tagline": "Hloubkové prokrvení & zpevnění",
+  "duration": "45 min",
+  "price": "1 100 Kč",
+  "image": "/assets/hero_bg.png",
+  "shortDesc": "Neinvazivní ošetření speciálními baňkami, které prokrvuje pokožku do hloubky, odstraňuje svalové blokády a čistí póry.",
+  "longDesc": "Baňkování obličeje (facial cupping) využívá jemné podtlakové baňky navržené speciálně pro citlivou pokožku obličeje a dekoltu. Podtlak stimuluje krevní oběh v nejhlubších vrstvách kůže, okysličuje tkáně a urychluje odvod metabolických odpadů lymfatickým systémem. V kombinaci s Gua Sha masáží dosahuje mimořádně zpevňujících výsledků.",
+  "benefits": [
+    "Hloubkově čistí pleť a zabraňuje rozšiřování pórů",
+    "Prokrvuje obličej v hlubších vrstvách pokožky",
+    "Zlepšuje elasticitu pokožky a stimuluje regenerační procesy",
+    "Zanechává pleť zpevněnou, hladkou a odpočatou"
+  ],
+  "contraindications": "Křehké cévky (kuperóza), tenká a velmi citlivá pleť, akutní kožní záněty, čerstvé jizvy nebo výplně.",
+  "sortOrder": 3
+}

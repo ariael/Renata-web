@@ -1,0 +1,65 @@
+backend:
+  name: git-gateway
+  branch: master
+
+media_folder: "public/assets"
+public_folder: "/assets"
+
+collections:
+  - name: "services"
+    label: "Služby"
+    folder: "src/data/services"
+    create: true
+    slug: "{{slug}}"
+    format: "json"
+    fields:
+      - { label: "ID (např. guasha)", name: "id", widget: "string" }
+      - { label: "Název", name: "title", widget: "string" }
+      - { label: "Podtitulek", name: "tagline", widget: "string" }
+      - { label: "Doba ošetření (např. 60 min)", name: "duration", widget: "string" }
+      - { label: "Cena (např. 1 200 Kč)", name: "price", widget: "string" }
+      - { label: "Obrázek", name: "image", widget: "image" }
+      - { label: "Stručný popis", name: "shortDesc", widget: "text" }
+      - { label: "Dlouhý popis", name: "longDesc", widget: "markdown" }
+      - { label: "Výhody (jeden řádek = jedna výhoda)", name: "benefits", widget: "list", field: { widget: "string" } }
+      - { label: "Kontraindikace", name: "contraindications", widget: "text" }
+      - { label: "Pořadí zobrazení", name: "sortOrder", widget: "number", value_type: "int" }
+
+  - name: "settings"
+    label: "Nastavení webu"
+    delete: false
+    editor:
+      preview: false
+    files:
+      - name: "homepage"
+        label: "Úvodní stránka"
+        file: "src/data/settings.json"
+        fields:
+          - { label: "Jméno a příjmení terapeuta", name: "contactName", widget: "string" }
+          - { label: "Město / Adresa", name: "contactAddress", widget: "string" }
+          - { label: "Telefon", name: "contactPhone", widget: "string" }
+          - { label: "Email", name: "contactEmail", widget: "string" }
+          - { label: "Hero podnadpis", name: "heroTagline", widget: "string" }
+          - { label: "Hero nadpis", name: "heroTitle", widget: "string" }
+          - { label: "Hero text", name: "heroDescription", widget: "text" }
+          - { label: "O mně - Nadpis", name: "aboutTitle", widget: "string" }
+          - { label: "O mně - Odstavec 1", name: "aboutText1", widget: "text" }
+          - { label: "O mně - Odstavec 2", name: "aboutText2", widget: "text" }
+          - { label: "O mně - Citát", name: "aboutQuote", widget: "string" }
+          - { label: "O mně - Odstavec 3", name: "aboutText3", widget: "text" }
+          - { label: "Proč přirozeně - Nadpis", name: "whyTitle", widget: "string" }
+          - { label: "Proč přirozeně - Popis 1", name: "whyDescription1", widget: "text" }
+          - { label: "Proč přirozeně - Popis 2", name: "whyDescription2", widget: "text" }
+          - { label: "Proč přirozeně - Popis 3", name: "whyDescription3", widget: "text" }
+          - { label: "Karta 1 (Aktivace kolagenu) - Nadpis", name: "card1Title", widget: "string" }
+          - { label: "Karta 1 - Popis", name: "card1Desc", widget: "text" }
+          - { label: "Karta 2 (Lymfatický odtok) - Nadpis", name: "card2Title", widget: "string" }
+          - { label: "Karta 2 - Popis", name: "card2Desc", widget: "text" }
+          - { label: "Karta 3 (Uvolnění stresu) - Nadpis", name: "card3Title", widget: "string" }
+          - { label: "Karta 3 - Popis", name: "card3Desc", widget: "text" }
+          - { label: "Karta 4 (Bez chemie) - Nadpis", name: "card4Title", widget: "string" }
+          - { label: "Karta 4 - Popis", name: "card4Desc", widget: "text" }
+          - { label: "Ceník - Nadpis", name: "pricingTitle", widget: "string" }
+          - { label: "Ceník - Popis", name: "pricingDesc", widget: "text" }
+          - { label: "Kontakt - Nadpis", name: "contactTitle", widget: "string" }
+          - { label: "Kontakt - Popis", name: "contactDesc", widget: "text" }
