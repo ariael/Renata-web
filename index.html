@@ -1,42 +1,49 @@
 <!doctype html>
 <html lang="cs">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/src/assets/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- SEO Meta Tags -->
-    <title>NatureLift | Přirozený lifting obličeje a TCM Poděbrady</title>
-    <meta name="description" content="NatureLift - přirozený lifting obličeje Gua Sha, baňkováním, bukálními masážemi a aurikuloterapií v Poděbradech. Omlazení a hluboké uvolnění inspirované tradiční čínskou medicínou." />
-    <meta name="keywords" content="bukální masáž, Gua Sha, lifting obličeje, baňkování obličeje, aurikuloterapie, akupunktura ucha, Poděbrady, omlazení, TCM, Renata Tomášová" />
-    <meta name="author" content="Renata Tomášová" />
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="NatureLift | Přirozený lifting obličeje a TCM Poděbrady" />
-    <meta property="og:description" content="Objevte kouzlo neinvazivního omlazení obličeje a tradiční čínské medicíny. Specializuji se na bukální masáže, Gua Sha a aurikuloterapii." />
-    <meta property="og:url" content="https://www.naturelift.help" />
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Google Fonts Preconnect -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Netlify Identity Widget -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-    <!-- Netlify Identity login redirect -->
-    <script>
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on("init", user => {
-          if (!user) {
-            window.netlifyIdentity.on("login", () => {
-              document.location.href = "/admin/";
-            });
-          }
-        });
-      }
-    </script>
-  </body>
+  <!-- SEO Meta Tags -->
+  <title>NatureLift | Přirozený lifting obličeje a TCM Poděbrady</title>
+  <meta name="description"
+    content="NatureLift - přirozený lifting obličeje Gua Sha, baňkováním, bukálními masážemi a aurikuloterapií v Poděbradech. Omlazení a hluboké uvolnění inspirované tradiční čínskou medicínou." />
+  <meta name="keywords"
+    content="bukální masáž, Gua Sha, lifting obličeje, baňkování obličeje, aurikuloterapie, akupunktura ucha, Poděbrady, omlazení, TCM, Renata Tomášová" />
+  <meta name="author" content="Renata Tomášová" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="NatureLift | Přirozený lifting obličeje a TCM Poděbrady" />
+  <meta property="og:description"
+    content="Objevte kouzlo neinvazivního omlazení obličeje a tradiční čínské medicíny. Specializuji se na bukální masáže, Gua Sha a aurikuloterapii." />
+  <meta property="og:url" content="https://www.naturelift.help" />
+
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <!-- Netlify Identity Widget -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+  <!-- Netlify Identity login redirect -->
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  </script>
+</body>
+
 </html>

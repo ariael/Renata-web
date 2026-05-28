@@ -7,14 +7,14 @@ Tento dokument detailně popisuje síťovou strukturu, hosting, DNS, git repozit
 Pro testovací i produkční verzi byla zvolena **Možnost A (Netlify / Vercel)** s bezplatným tarifem.
 
 ### Testovací verze (Staging)
-* **Hosting:** Netlify nebo Vercel (bezplatný plán).
-* **Adresa projektu:** Bude vygenerována po prvním nasazení (např. `renata-web.netlify.app` nebo `renata-web.vercel.app`).
-* **Nasazování:** Automatické (CI/CD) při každém pushnutí do větve `main` na Git.
+* **Hosting:** Netlify (bezplatný plán).
+* **Adresa projektu:** [magical-tiramisu-b97682.netlify.app](https://magical-tiramisu-b97682.netlify.app/)
+* **Nasazování:** Automatické (CI/CD) při každém pushnutí do větve `master` na Git.
 
 ### Produkční verze (Production)
-* **Doména:** `www.naturelift.help` / `naturelift.help`
-* **DNS a Registrátor:** Porkbun (porkbun.com). Doména bude nasměrována pomocí CNAME / ALIAS záznamů (nebo NS záznamů) na hosting Netlify/Vercel.
-* **SSL Certifikát:** Let's Encrypt (automaticky spravovaný a obnovovaný hostingovou platformou, HTTPS vynuceno).
+* **Doména:** [naturelift.help](https://naturelift.help) / [www.naturelift.help](https://www.naturelift.help) (Plně aktivní a nasměrovaná)
+* **DNS a Registrátor:** Porkbun (porkbun.com). Nasměrováno pomocí ALIAS a CNAME na Netlify (`magical-tiramisu-b97682.netlify.app`).
+* **SSL Certifikát:** Let's Encrypt (aktivní, automaticky spravovaný a obnovovaný Netlify, HTTPS vynuceno).
 
 ---
 
@@ -28,9 +28,13 @@ Pro testovací i produkční verzi byla zvolena **Možnost A (Netlify / Vercel)*
   1. Lokální úpravy a otestování (`npm run dev`).
   2. Vytvoření buildu (`npm run build`) pro ověření chyb v kompilaci a TypeScriptu.
   3. Commit a Push do vzdáleného repozitáře (`git push origin master`).
-  4. Automatický build a deployment na straně hostingu (Netlify / Vercel).
+  4. Automatický build a deployment na straně Netlify.
 
-### Postup pro první nasazení (Deployment)
-Pro okamžité nasazení a spuštění projektu na internetu stačí kliknout na jeden z následujících odkazů, který automaticky naimportuje a zprovozní web pod vaším účtem:
-* **[Nasadit na Vercel (1-Click)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fariael%2FRenata-web)**
-* **[Nasadit na Netlify (1-Click)](https://app.netlify.com/start/deploy?repository=https%3A%2F%2Fgithub.com%2Fariael%2FRenata-web)**
+### Postup pro nasazení a propojení domény
+1. V administraci Netlify přejděte na **Site configuration** -> **Domain management** -> **Add custom domain**.
+2. Přidejte `naturelift.help`.
+3. V administraci Porkbun upravte DNS záznamy:
+   - Změňte **ALIAS** záznam pro `naturelift.help` z `pixie.porkbun.com` na `magical-tiramisu-b97682.netlify.app`.
+   - Změňte/přidejte **CNAME** záznam pro `www.naturelift.help` (nebo divokou kartu `*`) na `magical-tiramisu-b97682.netlify.app`.
+   - Případně lze přejít na Netlify DNS (přepsáním NS záznamů v Porkbunu podle pokynů Netlify).
+

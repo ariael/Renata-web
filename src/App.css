@@ -5,6 +5,7 @@ header {
   height: 80px;
   display: flex;
   align-items: center;
+  transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, backdrop-filter 0.4s ease;
 }
 
 .nav-container {
@@ -227,8 +228,8 @@ header {
 }
 
 .service-card:hover {
-  transform: translateY(-8px);
-  box-shadow: rgba(44, 51, 45, 0.12) 0 20px 40px -10px;
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: var(--shadow-hover);
   border-color: var(--accent);
 }
 
@@ -331,8 +332,18 @@ header {
   font-family: var(--font-sans);
 }
 
+.service-more-btn svg {
+  transition: transform 0.3s ease;
+}
+
 .service-more-btn:hover {
   color: var(--accent);
+  gap: 0.5rem;
+}
+
+.service-card:hover .service-more-btn svg,
+.service-more-btn:hover svg {
+  transform: translateX(4px);
 }
 
 /* Why Section */
@@ -353,11 +364,13 @@ header {
   border-radius: 20px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
-  transition: transform 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
 }
 
 .why-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover), 0 0 0 1px var(--accent);
+  border-color: var(--accent);
 }
 
 .why-icon {
@@ -572,7 +585,7 @@ header {
   outline: none;
   border-color: var(--accent);
   background-color: var(--bg-primary);
-  box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.1);
+  box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.15), 0 2px 8px rgba(197, 160, 89, 0.08);
 }
 
 textarea.form-control {
@@ -586,15 +599,106 @@ textarea.form-control {
   gap: 1.25rem;
 }
 
+.booking-form {
+  position: relative;
+}
+
+.form-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(253, 251, 247, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 24px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .form-loading-overlay {
+    background-color: rgba(17, 20, 18, 0.8);
+  }
+}
+
+.spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 0.75rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 .form-success-message {
-  background-color: rgba(86, 101, 88, 0.1);
-  border: 1px solid var(--primary);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--accent);
   color: var(--text-primary);
-  padding: 1.5rem;
-  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  border-radius: 16px;
   margin-bottom: 1.5rem;
   text-align: center;
-  font-weight: 500;
+  animation: scaleUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.success-checkmark {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 0.75rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+.checkmark-circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: var(--accent);
+  fill: none;
+  animation: strokeCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark-check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  stroke: var(--primary);
+  animation: strokeCheck 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+}
+
+@keyframes strokeCircle {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes strokeCheck {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Map Section */
@@ -718,11 +822,10 @@ textarea.form-control {
 }
 
 .modal-list li::before {
-  content: '✓';
+  content: '✦';
   position: absolute;
   left: 0;
   color: var(--accent);
-  font-weight: bold;
 }
 
 .modal-contraindications {
@@ -862,4 +965,36 @@ footer {
   .modal-body {
     padding: 2rem 1.5rem;
   }
+}
+
+/* Button press micro-interaction */
+.btn:active {
+  transform: translateY(0) scale(0.97) !important;
+  transition-duration: 0.1s;
+}
+
+
+/* Pricing row hover accent indicator */
+.pricing-row {
+  position: relative;
+}
+.pricing-row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) scaleY(0);
+  width: 3px;
+  height: 60%;
+  background-color: var(--accent);
+  border-radius: 0 2px 2px 0;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.pricing-row:hover::before {
+  transform: translateY(-50%) scaleY(1);
+}
+
+/* Nav link active state */
+.nav-item a.active {
+  color: var(--accent);
 }

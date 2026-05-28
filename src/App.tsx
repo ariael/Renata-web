@@ -21,6 +21,8 @@ export default function App() {
     message: ''
   })
   const [formSubmitted, setFormSubmitted] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isFormSending, setIsFormSending] = useState(false)
 
   useEffect(() => {
     async function loadCMSData() {
@@ -33,6 +35,34 @@ export default function App() {
     loadCMSData()
   }, [])
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 40)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('reveal-visible')
+          }
+        })
+      },
+      { threshold: 0.05, rootMargin: '0px 0px -50px 0px' }
+    )
+
+    const revealElements = document.querySelectorAll('.reveal')
+    revealElements.forEach((el) => observer.observe(el))
+
+    return () => {
+      revealElements.forEach((el) => observer.unobserve(el))
+    }
+  }, [services, settings])
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
@@ -40,29 +70,56 @@ export default function App() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Simulace odeslání rezervačního formuláře
-    console.log('Rezervace odeslána:', formData)
-    setFormSubmitted(true)
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      service: '',
-      date: '',
-      message: ''
-    })
+    setIsFormSending(true)
+    
+    // Simulate real network request
     setTimeout(() => {
-      setFormSubmitted(false)
-    }, 8000)
+      console.log('Rezervace odeslána:', formData)
+      setIsFormSending(false)
+      setFormSubmitted(true)
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        service: '',
+        date: '',
+        message: ''
+      })
+      setTimeout(() => {
+        setFormSubmitted(false)
+      }, 10000)
+    }, 1200)
   }
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
   const closeMenu = () => setIsMenuOpen(false)
 
+  const highlightText = (text: string) => {
+    if (!text) return '';
+    const keywords = [
+      'neinvazivní omlazující techniky',
+      'neinvazivní omlazení',
+      'tradiční čínské medicíny',
+      'tradiční čínské metody',
+      'přirozené kráse, zdraví a vnitřní rovnováze',
+      'hlubokou relaxaci',
+      'Gua Sha',
+      'baňkování',
+      'bukální masáže',
+      'aurikuloterapii'
+    ];
+    let html = text;
+    keywords.forEach(keyword => {
+      const regex = new RegExp(`(${keyword})`, 'gi');
+      html = html.replace(regex, '<span class="text-highlight">$1</span>');
+    });
+    return <span dangerouslySetInnerHTML={{ __html: html }} />;
+  }
+
   return (
     <>
       {/* Header */}
-      <header>
+      <header className={isScrolled ? 'scrolled' : ''}>
         <div className="container nav-container">
           <a href="#" className="logo-link" onClick={closeMenu}>
             <span className="logo-title">NatureLift</span>
@@ -109,7 +166,7 @@ export default function App() {
       {/* Hero Section */}
       <section className="hero-section">
         <div className="container">
-          <div className="hero-content">
+          <div className="hero-content reveal reveal-fade">
             <span className="hero-tagline">{settings.heroTagline}</span>
             <h1>{settings.heroTitle}</h1>
             <p>{settings.heroDescription}</p>
@@ -119,25 +176,45 @@ export default function App() {
             </div>
           </div>
         </div>
+        <div className="hero-scroll-indicator">
+          <span className="scroll-text">Objevte péči</span>
+          <svg className="scroll-arrow" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none">
+            <polyline points="7 13 12 18 17 13" />
+            <polyline points="7 6 12 11 17 6" />
+          </svg>
+        </div>
       </section>
 
       {/* About Section */}
       <section id="omne" className="section">
+        {/* Botanical SVG background decoration */}
+        <div className="botanical-decor botanical-decor-1">
+          <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.06">
+            <path d="M50 95 C50 95, 20 60, 20 35 C20 15, 35 10, 50 35 C65 10, 80 15, 80 35 C80 60, 50 95, 50 95 Z" />
+            <path d="M50 95 L50 35" />
+            <path d="M50 80 Q35 70, 30 65" />
+            <path d="M50 80 Q65 70, 70 65" />
+            <path d="M50 65 Q35 55, 25 50" />
+            <path d="M50 65 Q65 55, 75 50" />
+            <path d="M50 50 Q35 40, 28 35" />
+            <path d="M50 50 Q65 40, 72 35" />
+          </svg>
+        </div>
         <div className="container">
           <div className="grid grid-2 about-grid">
-            <div className="about-image-wrapper">
+            <div className="about-image-wrapper reveal reveal-left">
               <img src={services.find(s => s.id === 'guasha')?.image || services[0]?.image} alt={`${settings.contactName} - NatureLift`} className="about-image" />
               <div className="about-badge">
                 <div className="about-badge-num">TCM</div>
                 <div className="about-badge-text">Tradiční čínské metody</div>
               </div>
             </div>
-            <div className="about-content">
+            <div className="about-content reveal reveal-right">
               <h2>{settings.aboutTitle}</h2>
-              <p>{settings.aboutText1}</p>
-              <p>{settings.aboutText2}</p>
+              <p>{highlightText(settings.aboutText1)}</p>
+              <p>{highlightText(settings.aboutText2)}</p>
               <div className="about-quote">{settings.aboutQuote}</div>
-              <p style={{ marginBottom: 0 }}>{settings.aboutText3}</p>
+              <p style={{ marginBottom: 0 }}>{highlightText(settings.aboutText3)}</p>
             </div>
           </div>
         </div>
@@ -146,7 +223,7 @@ export default function App() {
       {/* Services Section */}
       <section id="sluzby" className="section section-bg">
         <div className="container">
-          <div className="text-center services-intro">
+          <div className="text-center services-intro reveal reveal-fade">
             <h2>Naše služby</h2>
             <p>
               Každá procedura je prováděna s důrazem na detail a relaxační zážitek. Spojuji staleté zkušenosti 
@@ -156,7 +233,7 @@ export default function App() {
 
           <div className="grid grid-2">
             {services.map((service) => (
-              <div className="service-card" key={service.id}>
+              <div className="service-card reveal reveal-up" key={service.id}>
                 <div className="service-image-container">
                   <img src={service.image} alt={service.title} />
                 </div>
@@ -194,14 +271,14 @@ export default function App() {
         <div className="container">
           <div className="why-section">
             <div className="grid grid-2 why-grid">
-              <div>
+              <div className="reveal reveal-left">
                 <h2>{settings.whyTitle}</h2>
-                <p>{settings.whyDescription1}</p>
-                <p>{settings.whyDescription2}</p>
-                <p style={{ marginBottom: 0 }}>{settings.whyDescription3}</p>
+                <p>{highlightText(settings.whyDescription1)}</p>
+                <p>{highlightText(settings.whyDescription2)}</p>
+                <p style={{ marginBottom: 0 }}>{highlightText(settings.whyDescription3)}</p>
               </div>
               <div className="grid grid-2" style={{ gap: '1.5rem' }}>
-                <div className="why-card">
+                <div className="why-card reveal reveal-up">
                   <div className="why-icon">
                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none">
                       <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
@@ -210,7 +287,7 @@ export default function App() {
                   <h4>{settings.card1Title}</h4>
                   <p>{settings.card1Desc}</p>
                 </div>
-                <div className="why-card">
+                <div className="why-card reveal reveal-up">
                   <div className="why-icon">
                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none">
                       <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
@@ -219,7 +296,7 @@ export default function App() {
                   <h4>{settings.card2Title}</h4>
                   <p>{settings.card2Desc}</p>
                 </div>
-                <div className="why-card">
+                <div className="why-card reveal reveal-up">
                   <div className="why-icon">
                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none">
                       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -228,7 +305,7 @@ export default function App() {
                   <h4>{settings.card3Title}</h4>
                   <p>{settings.card3Desc}</p>
                 </div>
-                <div className="why-card">
+                <div className="why-card reveal reveal-up">
                   <div className="why-icon">
                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none">
                       <circle cx="12" cy="12" r="10" />
@@ -247,12 +324,12 @@ export default function App() {
       {/* Pricing Section */}
       <section id="cenik" className="section section-bg">
         <div className="container">
-          <div className="text-center pricing-intro">
+          <div className="text-center pricing-intro reveal reveal-fade">
             <h2>{settings.pricingTitle}</h2>
-            <p>{settings.pricingDesc}</p>
+            <p>{highlightText(settings.pricingDesc)}</p>
           </div>
 
-          <div className="pricing-table-container">
+          <div className="pricing-table-container reveal reveal-up">
             {services.map((service) => (
               <div className="pricing-row" key={service.id}>
                 <div className="pricing-info">
@@ -283,10 +360,23 @@ export default function App() {
 
       {/* Contact & Booking Section */}
       <section id="kontakt" className="section">
+        {/* Botanical SVG background decoration */}
+        <div className="botanical-decor botanical-decor-2">
+          <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.05">
+            <path d="M50 5 C50 5, 80 40, 80 65 C80 85, 65 90, 50 65 C35 90, 20 85, 20 65 C20 40, 50 5, 50 5 Z" />
+            <path d="M50 5 L50 65" />
+            <path d="M50 20 Q65 30, 70 35" />
+            <path d="M50 20 Q35 30, 30 35" />
+            <path d="M50 35 Q65 45, 75 50" />
+            <path d="M50 35 Q35 45, 25 50" />
+            <path d="M50 50 Q65 60, 72 65" />
+            <path d="M50 50 Q35 60, 28 65" />
+          </svg>
+        </div>
         <div className="container">
           <div className="grid grid-2 contact-grid">
             {/* Contact Info */}
-            <div className="contact-info-card">
+            <div className="contact-info-card reveal reveal-left">
               <h2 className="contact-info-title">{settings.contactTitle}</h2>
               <p>{settings.contactDesc}</p>
 
@@ -349,22 +439,32 @@ export default function App() {
             </div>
 
             {/* Booking Form */}
-            <div id="rezervace" className="booking-form">
+            <div id="rezervace" className="booking-form reveal reveal-right">
               <h2 className="booking-form-title">Rezervace termínu</h2>
-              {formSubmitted ? (
-                <div className="form-success-message">
-                  <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" strokeWidth="2.5" fill="none" style={{ marginBottom: '0.75rem', display: 'inline-block' }}>
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                    <polyline points="22 4 12 14.01 9 11.01" />
-                  </svg>
-                  <div>Děkujeme za váš zájem!</div>
-                  <p style={{ fontSize: '0.95rem', margin: '0.5rem 0 0', color: 'inherit' }}>
+              
+              {isFormSending && (
+                <div className="form-loading-overlay">
+                  <div className="spinner"></div>
+                  <p>Odesílám rezervaci...</p>
+                </div>
+              )}
+
+              {formSubmitted && (
+                <div className="form-success-message animate-success">
+                  <div className="success-checkmark">
+                    <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" strokeWidth="3" fill="none">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" className="checkmark-circle" />
+                      <polyline points="22 4 12 14.01 9 11.01" className="checkmark-check" />
+                    </svg>
+                  </div>
+                  <div style={{ fontWeight: '600', fontSize: '1.2rem', marginTop: '0.5rem' }}>Děkujeme za váš zájem!</div>
+                  <p style={{ fontSize: '0.95rem', margin: '0.5rem 0 0', color: 'inherit', opacity: 0.9 }}>
                     Rezervační formulář byl úspěšně odeslán. Renata vás bude kontaktovat telefonicky nebo e-mailem pro potvrzení přesného času ošetření.
                   </p>
                 </div>
-              ) : null}
+              )}
 
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} style={{ opacity: isFormSending || formSubmitted ? 0.3 : 1, transition: 'opacity 0.3s ease', pointerEvents: isFormSending || formSubmitted ? 'none' : 'auto' }}>
                 <div className="form-group">
                   <label className="form-label" htmlFor="name">Jméno a příjmení</label>
                   <input
@@ -464,7 +564,7 @@ export default function App() {
           </div>
 
           {/* Map Embed (Poděbrady) using OpenStreetMap iframe */}
-          <div className="map-container">
+          <div className="map-container reveal reveal-up">
             <iframe
               title="Mapa Poděbrady"
               src="https://www.openstreetmap.org/export/embed.html?bbox=15.100989341735842%2C50.13459196395353%2C15.148110389709474%2C50.15175960010834&amp;layer=mapnik&amp;marker=50.14317823908846%2C15.124549865722656"
