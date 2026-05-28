@@ -46,6 +46,7 @@ export interface HomepageSettings {
   contactAddress: string
   contactPhone: string
   contactEmail: string
+  mapAddress: string
 }
 
 export const SERVICES_FALLBACK_DATA: Service[] = [
@@ -155,5 +156,6 @@ export const HOMEPAGE_SETTINGS_FALLBACK: HomepageSettings = {
   contactName: 'Renata Tomášová',
   contactAddress: 'Poděbrady',
   contactPhone: '+420 733 783 125',
-  contactEmail: 'renata.tomasova@seznam.cz'
+  contactEmail: 'renata.tomasova@seznam.cz',
+  mapAddress: 'Poděbrady, Czech Republic'
 }

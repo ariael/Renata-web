@@ -21,6 +21,7 @@ export default function App() {
     message: ''
   })
   const [formSubmitted, setFormSubmitted] = useState(false)
+  const [formError, setFormError] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isFormSending, setIsFormSending] = useState(false)
 
@@ -68,27 +69,45 @@ export default function App() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsFormSending(true)
-    
-    // Simulate real network request
-    setTimeout(() => {
-      console.log('Rezervace odeslána:', formData)
-      setIsFormSending(false)
-      setFormSubmitted(true)
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        service: '',
-        date: '',
-        message: ''
+    setFormError(false)
+
+    const selectedService = services.find(s => s.id === formData.service)
+    const serviceLabel = selectedService
+      ? `${selectedService.title} (${selectedService.duration} / ${selectedService.price})`
+      : formData.service === 'kombi'
+        ? 'Kombinované ošetření (90 min / 2 100 Kč)'
+        : formData.service
+
+    try {
+      const response = await fetch('https://formspree.io/f/mpqnbyqe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          jmeno: formData.name,
+          email: formData.email,
+          telefon: formData.phone,
+          sluzba: serviceLabel,
+          datum: formData.date,
+          zprava: formData.message,
+          _subject: `Nová rezervace – ${formData.name}`,
+        }),
       })
-      setTimeout(() => {
-        setFormSubmitted(false)
-      }, 10000)
-    }, 1200)
+
+      if (response.ok) {
+        setFormSubmitted(true)
+        setFormData({ name: '', email: '', phone: '', service: '', date: '', message: '' })
+        setTimeout(() => setFormSubmitted(false), 10000)
+      } else {
+        setFormError(true)
+      }
+    } catch {
+      setFormError(true)
+    } finally {
+      setIsFormSending(false)
+    }
   }
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
@@ -464,6 +483,17 @@ export default function App() {
                 </div>
               )}
 
+              {formError && (
+                <div className="form-error-message">
+                  <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" strokeWidth="2" fill="none" style={{ flexShrink: 0 }}>
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                  <span>Odeslání se nezdařilo. Zkuste to prosím znovu nebo nás kontaktujte přímo na <a href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a>.</span>
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} style={{ opacity: isFormSending || formSubmitted ? 0.3 : 1, transition: 'opacity 0.3s ease', pointerEvents: isFormSending || formSubmitted ? 'none' : 'auto' }}>
                 <div className="form-group">
                   <label className="form-label" htmlFor="name">Jméno a příjmení</label>
@@ -563,11 +593,13 @@ export default function App() {
             </div>
           </div>
 
-          {/* Map Embed (Poděbrady) using OpenStreetMap iframe */}
+          {/* Map Embed - dynamická adresa z CMS */}
           <div className="map-container reveal reveal-up">
             <iframe
-              title="Mapa Poděbrady"
-              src="https://www.openstreetmap.org/export/embed.html?bbox=15.100989341735842%2C50.13459196395353%2C15.148110389709474%2C50.15175960010834&amp;layer=mapnik&amp;marker=50.14317823908846%2C15.124549865722656"
+              title="Mapa provozovny"
+              src={`https://maps.google.com/maps?q=${encodeURIComponent(settings.mapAddress || 'Poděbrady, Czech Republic')}&output=embed&hl=cs&z=15`}
+              referrerPolicy="no-referrer-when-downgrade"
+              loading="lazy"
             />
           </div>
         </div>

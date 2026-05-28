@@ -111,6 +111,7 @@ export async function fetchHomepageSettings(): Promise<HomepageSettings> {
       contactAddress: item.contactAddress || item.contact_address || HOMEPAGE_SETTINGS_FALLBACK.contactAddress,
       contactPhone: item.contactPhone || item.contact_phone || HOMEPAGE_SETTINGS_FALLBACK.contactPhone,
       contactEmail: item.contactEmail || item.contact_email || HOMEPAGE_SETTINGS_FALLBACK.contactEmail,
+      mapAddress: item.mapAddress || item.map_address || HOMEPAGE_SETTINGS_FALLBACK.mapAddress,
     }
   } catch (error) {
     console.warn('Failed to parse settings JSON, using fallback data:', error)

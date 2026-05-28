@@ -63,3 +63,4 @@ collections:
           - { label: "Ceník - Popis", name: "pricingDesc", widget: "text" }
           - { label: "Kontakt - Nadpis", name: "contactTitle", widget: "string" }
           - { label: "Kontakt - Popis", name: "contactDesc", widget: "text" }
+          - { label: "Adresa provozovny pro mapu (např. Poděbrady, náměstí T. G. Masaryka 1)", name: "mapAddress", widget: "string" }

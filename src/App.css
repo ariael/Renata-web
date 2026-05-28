@@ -650,6 +650,30 @@ textarea.form-control {
   animation: scaleUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
+.form-error-message {
+  background-color: var(--bg-secondary);
+  border: 1px solid #e05252;
+  color: var(--text-primary);
+  padding: 1rem 1.5rem;
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  animation: scaleUp 0.3s ease forwards;
+}
+
+.form-error-message svg {
+  color: #e05252;
+  margin-top: 1px;
+}
+
+.form-error-message a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
 .success-checkmark {
   width: 60px;
   height: 60px;
