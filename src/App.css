@@ -95,7 +95,7 @@ header {
       rgba(253, 251, 247, 0.45) 0%,
       rgba(253, 251, 247, 0.95) 100%
     ),
-    url('./assets/hero_bg.png');
+    url('./assets/hero_bg.webp');
   background-size: cover;
   background-position: center;
   padding-top: 100px;
@@ -108,7 +108,7 @@ header {
         rgba(18, 22, 19, 0.45) 0%,
         rgba(18, 22, 19, 0.95) 100%
       ),
-      url('./assets/hero_bg.png');
+      url('./assets/hero_bg.webp');
   }
 }
 

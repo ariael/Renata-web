@@ -1,19 +1,19 @@
 {
+  "id": "auriculo",
+  "title": "Aurikuloterapie",
+  "tagline": "Harmonizace těla přes body na uchu",
+  "duration": "30 min",
   "price": "250 Kč",
+  "image": "/assets/auriculotherapy.webp",
   "shortDesc": "Jemná ušní akupresura s využitím magnetických kuliček pro nastartování přirozené regenerace a psychické i fyzické rovnováhy.",
   "longDesc": "Aurikuloterapie (ušní akupunktura/akupresura) je uznávaná metoda tradiční čínské medicíny (TCM). Ušní boltec představuje mikrosystém celého lidského těla. Stimulací specifických bodů na uchu (pomocí neinvazivních drobných magnetických kuliček nebo semínek vaccaria, které se na uchu nechávají působit několik dní) dochází k harmonizaci funkcí vnitřních orgánů, nervové soustavy a zmírnění potíží v celém těle.",
-  "tagline": "Harmonizace těla přes body na uchu",
-  "sortOrder": 4,
-  "duration": "30 min",
-  "contraindications": "Těhotenství (některé body jsou kontraindikovány), akutní zánět nebo poranění ušního boltce, kovové alergie (pokud se používají magnetické kuličky).",
-  "title": "Aurikuloterapie",
-  "id": "auriculo",
-  "image": "/assets/auriculotherapy.png",
   "benefits": [
     "Pomáhá při stresu, úzkostech a psychickém vyčerpání",
     "Zlepšuje kvalitu spánku, pomáhá při nespavosti a únavě",
     "Uvolňuje bolesti hlavy, zad a pohybového aparátu",
     "Podporuje metabolismus, hubnutí a zvládání chutí",
     "Pomáhá při odvykání kouření a harmonizuje trávení"
-  ]
+  ],
+  "contraindications": "Těhotenství (některé body jsou kontraindikovány), akutní zánět nebo poranění ušního boltce, kovové alergie (pokud se používají magnetické kuličky).",
+  "sortOrder": 4
 }

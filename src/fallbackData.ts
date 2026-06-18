@@ -1,7 +1,7 @@
-import heroBgImg from './assets/hero_bg.png'
-import guaShaImg from './assets/gua_sha_treatment.png'
-import buccalMassageImg from './assets/buccal_massage.png'
-import auriculotherapyImg from './assets/auriculotherapy.png'
+import heroBgImg from './assets/hero_bg.webp'
+import guaShaImg from './assets/gua_sha_treatment.webp'
+import buccalMassageImg from './assets/buccal_massage.webp'
+import auriculotherapyImg from './assets/auriculotherapy.webp'
 
 export interface Service {
   id: string
@@ -54,8 +54,8 @@ export const SERVICES_FALLBACK_DATA: Service[] = [
     id: 'buccal',
     title: 'Bukální masáž obličeje',
     tagline: 'Neinvazivní omlazení & modelování',
-    duration: '75 min',
-    price: '1 800 Kč',
+    duration: '60 min',
+    price: '1 200 Kč',
     image: buccalMassageImg,
     shortDesc: 'Hloubková intraorální masáž svalů a fascií obličeje, krku a dekoltu. Unikátní ošetření zvenčí i zevnitř úst pro okamžitý lifting.',
     longDesc: 'Bukální masáž (skulpturálně-intraorální lifting) patří mezi nejúčinnější neinvazivní omlazující techniky obličeje a krku. Ošetření probíhá ve dvou fázích: první fáze probíhá zvenčí na dekoltu, krku a obličeji; druhá fáze probíhá uvnitř úst (s použitím jednorázových sterilních rukavic). Tímto způsobem terapeut uvolní i hluboko uložené napjaté svaly, zejména v oblasti čelistí, což zmírňuje chronické napětí a redukuje vrásky.',
@@ -75,7 +75,7 @@ export const SERVICES_FALLBACK_DATA: Service[] = [
     title: 'Masáž Gua Sha',
     tagline: 'Tradiční čínský rituál omlazení',
     duration: '60 min',
-    price: '1 200 Kč',
+    price: '700 Kč',
     image: guaShaImg,
     shortDesc: 'Vysoce relaxační ošetření nefritovými kameny stimulující tvorbu kolagenu a lymfatický oběh pro zářivou a vyžehlenou pleť.',
     longDesc: 'Gua Sha je tradiční čínská terapeutická metoda stará více než 2000 let. Používáním speciálně tvarovaných destiček z polodrahokamů (nejčastěji nefritu nebo růženínu) jemnými tahy masírujeme pokožku obličeje podél energetických drah. Masáž aktivuje fascie, rozproudí lymfatický oběh, čistí tkáně od toxinů a přirozeně stimuluje produkci vlastního kolagenu a elastinu.',
@@ -93,8 +93,8 @@ export const SERVICES_FALLBACK_DATA: Service[] = [
     id: 'cupping',
     title: 'Baňkování obličeje',
     tagline: 'Hloubkové prokrvení & zpevnění',
-    duration: '45 min',
-    price: '1 100 Kč',
+    duration: '60 min',
+    price: '600 Kč',
     image: heroBgImg,
     shortDesc: 'Neinvazivní ošetření speciálními baňkami, které prokrvuje pokožku do hloubky, odstraňuje svalové blokády a čistí póry.',
     longDesc: 'Baňkování obličeje (facial cupping) využívá jemné podtlakové baňky navržené speciálně pro citlivou pokožku obličeje a dekoltu. Podtlak stimuluje krevní oběh v nejhlubších vrstvách kůže, okysličuje tkáně a urychluje odvod metabolických odpadů lymfatickým systémem. V kombinaci s Gua Sha masáží dosahuje mimořádně zpevňujících výsledků.',
@@ -111,8 +111,8 @@ export const SERVICES_FALLBACK_DATA: Service[] = [
     id: 'auriculo',
     title: 'Aurikuloterapie',
     tagline: 'Harmonizace těla přes body na uchu',
-    duration: '45 min',
-    price: '800 Kč',
+    duration: '30 min',
+    price: '250 Kč',
     image: auriculotherapyImg,
     shortDesc: 'Jemná ušní akupresura s využitím magnetických kuliček pro nastartování přirozené regenerace a psychické i fyzické rovnováhy.',
     longDesc: 'Aurikuloterapie (ušní akupunktura/akupresura) je uznávaná metoda tradiční čínské medicíny (TCM). Ušní boltec představuje mikrosystém celého lidského těla. Stimulací specifických bodů na uchu (pomocí neinvazivních drobných magnetických kuliček nebo semínek vaccaria, které se na uchu nechávají působit několik dní) dochází k harmonizaci funkcí vnitřních orgánů, nervové soustavy a zmírnění potíží v celém těle.',

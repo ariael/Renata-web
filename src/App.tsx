@@ -64,6 +64,21 @@ export default function App() {
     }
   }, [services, settings])
 
+  useEffect(() => {
+    if (!activeService) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActiveService(null)
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = ''
+    }
+  }, [activeService])
+
+  const todayStr = new Date().toISOString().split('T')[0]
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
@@ -77,9 +92,7 @@ export default function App() {
     const selectedService = services.find(s => s.id === formData.service)
     const serviceLabel = selectedService
       ? `${selectedService.title} (${selectedService.duration} / ${selectedService.price})`
-      : formData.service === 'kombi'
-        ? 'Kombinované ošetření (90 min / 2 100 Kč)'
-        : formData.service
+      : formData.service
 
     try {
       const response = await fetch('https://formspree.io/f/mpqnbyqe', {
@@ -222,7 +235,7 @@ export default function App() {
         <div className="container">
           <div className="grid grid-2 about-grid">
             <div className="about-image-wrapper reveal reveal-left">
-              <img src={services.find(s => s.id === 'guasha')?.image || services[0]?.image} alt={`${settings.contactName} - NatureLift`} className="about-image" />
+              <img src={services.find(s => s.id === 'guasha')?.image || services[0]?.image} alt={`${settings.contactName} - NatureLift`} className="about-image" loading="lazy" width="600" height="600" />
               <div className="about-badge">
                 <div className="about-badge-num">TCM</div>
                 <div className="about-badge-text">Tradiční čínské metody</div>
@@ -254,7 +267,7 @@ export default function App() {
             {services.map((service) => (
               <div className="service-card reveal reveal-up" key={service.id}>
                 <div className="service-image-container">
-                  <img src={service.image} alt={service.title} />
+                  <img src={service.image} alt={service.title} loading="lazy" width="600" height="240" />
                 </div>
                 <div className="service-card-content">
                   <span style={{ fontSize: '0.85rem', color: 'var(--accent)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.5rem', display: 'block' }}>
@@ -361,18 +374,6 @@ export default function App() {
                 </div>
               </div>
             ))}
-            {!services.some(s => s.id === 'kombi') && (
-              <div className="pricing-row">
-                <div className="pricing-info">
-                  <div className="pricing-title">Kombinované ošetření (Gua Sha + Baňkování)</div>
-                  <div className="pricing-desc">Intenzivní omlazující a zpevňující kúra pro náročné</div>
-                </div>
-                <div className="pricing-meta">
-                  <div className="pricing-time">90 min</div>
-                  <div className="pricing-price">2 100 Kč</div>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </section>
@@ -555,9 +556,6 @@ export default function App() {
                           {s.title} ({s.duration} / {s.price})
                         </option>
                       ))}
-                      {!services.some(s => s.id === 'kombi') && (
-                        <option value="kombi">Kombinované ošetření (90 min / 2 100 Kč)</option>
-                      )}
                     </select>
                   </div>
                   <div className="form-group">
@@ -567,6 +565,7 @@ export default function App() {
                       id="date"
                       name="date"
                       required
+                      min={todayStr}
                       className="form-control"
                       value={formData.date}
                       onChange={handleInputChange}
@@ -630,7 +629,7 @@ export default function App() {
       {/* Service Details Modal */}
       {activeService && (
         <div className="modal-overlay" onClick={() => setActiveService(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={activeService.title}>
             <button className="modal-close" onClick={() => setActiveService(null)} aria-label="Zavřít">
               <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2.5" fill="none">
                 <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />

@@ -66,7 +66,6 @@ Tento dokument obsahuje schválené texty, popisy procedur a ceník, které jsou
 | **Masáž Gua Sha** | 60 min | 1 200 Kč | Regenerační masáž nefritovými destičkami |
 | **Baňkování obličeje** | 45 min | 1 100 Kč | Hloubkové prokrvení a zpevnění pleti |
 | **Aurikuloterapie** | 45 min | 800 Kč | Ušní stimulace bodů pro celkovou harmonii |
-| **Kombinované ošetření (Gua Sha + Baňkování)** | 90 min | 2 100 Kč | Intenzivní omlazující kúra |
 
 ---
 

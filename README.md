@@ -1,73 +1,48 @@
-# React + TypeScript + Vite
+# NatureLift – web (naturelift.help)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Jednostránkový prezentačně-rezervační web pro neinvazivní kosmeticko-terapeutické služby
+inspirované tradiční čínskou medicínou (Gua Sha, baňkování obličeje, bukální masáže,
+aurikuloterapie). Klientka: **Renata Tomášová, Poděbrady**.
 
-Currently, two official plugins are available:
+## Tech stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **React 19 + TypeScript + Vite 8** – jednostránková aplikace ([src/App.tsx](src/App.tsx))
+- **Vanilla CSS** s CSS proměnnými (světlý i tmavý režim), bez frameworku
+- **Decap CMS** (Git-based) pro editaci obsahu bez kódu
+- **Formspree** pro odesílání rezervačního formuláře
+- Hosting **Netlify** (auto-deploy z větve `master`)
 
-## React Compiler
+## Obsah a CMS
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Obsah žije v JSON souborech, které edituje Decap CMS na `/admin/`:
 
-## Expanding the ESLint configuration
+- [src/data/settings.json](src/data/settings.json) – texty a kontaktní údaje úvodní stránky
+- [src/data/services/](src/data/services/) – jedna služba = jeden `.json` soubor
+- [src/fallbackData.ts](src/fallbackData.ts) – záložní data, pokud JSON chybí
+- Obrázky: `public/assets/` (ve formátu **WebP**)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Po uložení v CMS vznikne commit na GitHubu → Netlify automaticky sestaví a nasadí web (~1–2 min).
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Vývoj
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install      # instalace závislostí
+npm run dev      # lokální vývojový server
+npm run build    # produkční build (tsc + vite) do dist/
+npm run preview  # náhled produkčního buildu
+npm run lint     # ESLint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Optimalizace obrázků
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Obrázky se ukládají jako WebP (q80). Pro převod nových PNG/JPG lze jednorázově použít `sharp`:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install --no-save sharp
+# poté skript, který načte zdroje a uloží *.webp do src/assets a public/assets
 ```
+
+## Dokumentace
+
+Podrobná projektová dokumentace je ve složce [docs/](docs/) – architektura, topologie/nasazení,
+služby a ceník, nastavení CMS.
