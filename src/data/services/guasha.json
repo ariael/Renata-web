@@ -1,19 +1,19 @@
 {
-  "id": "guasha",
-  "title": "Masáž Gua Sha",
-  "tagline": "Tradiční čínský rituál omlazení",
-  "duration": "60 min",
-  "price": "700 Kč",
-  "image": "/assets/gua_sha_treatment.webp",
+  "price": "850 Kč",
   "shortDesc": "Vysoce relaxační ošetření nefritovými kameny stimulující tvorbu kolagenu a lymfatický oběh pro zářivou a vyžehlenou pleť.",
   "longDesc": "Gua Sha je tradiční čínská terapeutická metoda stará více než 2000 let. Používáním speciálně tvarovaných destiček z polodrahokamů (nejčastěji nefritu nebo růženínu) jemnými tahy masírujeme pokožku obličeje podél energetických drah. Masáž aktivuje fascie, rozproudí lymfatický oběh, čistí tkáně od toxinů a přirozeně stimuluje produkci vlastního kolagenu a elastinu.",
+  "tagline": "Tradiční čínský rituál omlazení",
+  "sortOrder": 2,
+  "duration": "60 min",
+  "contraindications": "Akutní akné, zánětlivá onemocnění kůže v obličeji, popáleniny od slunce, otevřené ranky, křečové žíly nebo křehké cévky v obličeji.",
+  "title": "Masáž Gua Sha",
+  "id": "guasha",
+  "image": "/assets/gua_sha_treatment.webp",
   "benefits": [
     "Zajišťuje vyšší tvorbu kolagenu a elastinu",
     "Zvyšuje pružnost a zářivost pleti (tzv. \"vyžehlený vzhled\")",
     "Odstraňuje otoky a váčky pod očima",
     "Zlepšuje mikrocirkulaci a výživu kožních buněk",
     "Uvolňuje napětí v oblasti čela, obočí a spánků"
-  ],
-  "contraindications": "Akutní akné, zánětlivá onemocnění kůže v obličeji, popáleniny od slunce, otevřené ranky, křečové žíly nebo křehké cévky v obličeji.",
-  "sortOrder": 2
+  ]
 }
