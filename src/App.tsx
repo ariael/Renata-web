@@ -308,8 +308,8 @@ export default function App() {
             <div className="about-image-wrapper reveal reveal-left">
               <img src={services.find(s => s.id === 'guasha')?.image || services[0]?.image} alt="Ošetření obličeje nefritovým kamenem Gua Sha v salonu NatureLift" className="about-image" loading="lazy" width="600" height="750" />
               <div className="about-badge">
-                <div className="about-badge-num">TCM</div>
-                <div className="about-badge-text">Tradiční čínské metody</div>
+                <div className="about-badge-num">{settings.aboutBadgeTitle}</div>
+                <div className="about-badge-text">{settings.aboutBadgeText}</div>
               </div>
             </div>
             <div className="about-content reveal reveal-right">
@@ -327,11 +327,8 @@ export default function App() {
       <section id="sluzby" className="section section-bg">
         <div className="container">
           <div className="text-center services-intro reveal reveal-fade">
-            <h2>Naše služby</h2>
-            <p>
-              Každá procedura je prováděna s důrazem na detail a relaxační zážitek. Spojuji staleté zkušenosti 
-              čínské medicíny s moderními poznatky o fasciích a svalové struktuře obličeje.
-            </p>
+            <h2>{settings.servicesTitle}</h2>
+            <p>{settings.servicesIntro}</p>
           </div>
 
           <div className="grid grid-2">
@@ -531,7 +528,7 @@ export default function App() {
 
             {/* Booking Form */}
             <div id="rezervace" className="booking-form reveal reveal-right">
-              <h2 className="booking-form-title">Rezervace termínu</h2>
+              <h2 className="booking-form-title">{settings.bookingTitle}</h2>
               
               {isFormSending && (
                 <div className="form-loading-overlay" role="status" aria-live="polite">
@@ -548,9 +545,9 @@ export default function App() {
                       <polyline points="22 4 12 14.01 9 11.01" className="checkmark-check" />
                     </svg>
                   </div>
-                  <div style={{ fontWeight: '600', fontSize: '1.2rem', marginTop: '0.5rem' }}>Děkujeme za váš zájem!</div>
+                  <div style={{ fontWeight: '600', fontSize: '1.2rem', marginTop: '0.5rem' }}>{settings.bookingSuccessTitle}</div>
                   <p style={{ fontSize: '0.95rem', margin: '0.5rem 0 0', color: 'inherit', opacity: 0.9 }}>
-                    Rezervační formulář byl úspěšně odeslán. Renata vás bude kontaktovat telefonicky nebo e-mailem pro potvrzení přesného času ošetření.
+                    {settings.bookingSuccessText}
                   </p>
                 </div>
               )}
@@ -710,7 +707,7 @@ export default function App() {
             &copy; {new Date().getFullYear()} NatureLift.help. Všechna práva vyhrazena. 
             <br />
             <span style={{ fontSize: '0.75rem', opacity: 0.6, marginTop: '0.5rem', display: 'block' }}>
-              Inspirováno tradiční čínskou medicínou a péčí o zdraví.
+              {settings.footerNote}
             </span>
           </div>
         </div>

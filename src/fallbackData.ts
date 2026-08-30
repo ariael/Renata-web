@@ -47,6 +47,16 @@ export interface HomepageSettings {
   contactPhone: string
   contactEmail: string
   mapAddress: string
+  servicesTitle: string
+  servicesIntro: string
+  bookingTitle: string
+  bookingSuccessTitle: string
+  bookingSuccessText: string
+  aboutBadgeTitle: string
+  aboutBadgeText: string
+  footerNote: string
+  seoTitle: string
+  seoDescription: string
 }
 
 export const SERVICES_FALLBACK_DATA: Service[] = [
@@ -157,5 +167,15 @@ export const HOMEPAGE_SETTINGS_FALLBACK: HomepageSettings = {
   contactAddress: 'Poděbrady',
   contactPhone: '+420 733 783 125',
   contactEmail: 'renata.tomasova@seznam.cz',
-  mapAddress: 'Poděbrady, Czech Republic'
+  mapAddress: 'Poděbrady, Czech Republic',
+  servicesTitle: 'Naše služby',
+  servicesIntro: 'Každá procedura je prováděna s důrazem na detail a relaxační zážitek. Spojuji staleté zkušenosti čínské medicíny s moderními poznatky o fasciích a svalové struktuře obličeje.',
+  bookingTitle: 'Rezervace termínu',
+  bookingSuccessTitle: 'Děkujeme za váš zájem!',
+  bookingSuccessText: 'Rezervační formulář byl úspěšně odeslán. Budeme vás kontaktovat telefonicky nebo e-mailem pro potvrzení přesného času ošetření.',
+  aboutBadgeTitle: 'TCM',
+  aboutBadgeText: 'Tradiční čínské metody',
+  footerNote: 'Inspirováno tradiční čínskou medicínou a péčí o zdraví.',
+  seoTitle: 'NatureLift | Přirozený lifting obličeje a TCM',
+  seoDescription: 'NatureLift – přirozený lifting obličeje Gua Sha, baňkováním, bukálními masážemi a aurikuloterapií. Omlazení a hluboké uvolnění inspirované tradiční čínskou medicínou.'
 }

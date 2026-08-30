@@ -27,5 +27,29 @@
   "whyDescription1": "Mladý obličej má pevné svaly, neporušené fascie, dobře fungující tok lymfy a pružné cévky. Čím jsme starší, tím větší podporu od nás naše pleť potřebuje.",
   "heroTitle": "Cesta k přirozené kráse, zdraví a harmonii",
   "whyDescription2": "Chronické napětí se hromadí zejména v čelistech, kolem rtů a na čele, což vede k vzniku hlubokých vrásek. Postupně klesá hustota kostí, ochabuje svalstvo a dochází k poklesu kontur obličeje. Lymfatický oběh se zpomaluje, což způsobuje ranní otoky a nezdravý tón pleti.",
-  "whyDescription3": "Naše přirozené, neinvazivní omlazující techniky (Gua Sha, baňkování, bukální masáže) působí v nejhlubších vrstvách kůže, svalů i pojivových tkání. Oživují zanedbané oblasti a spouští ozdravné procesy celého organismu."
+  "whyDescription3": "Naše přirozené, neinvazivní omlazující techniky (Gua Sha, baňkování, bukální masáže) působí v nejhlubších vrstvách kůže, svalů i pojivových tkání. Oživují zanedbané oblasti a spouští ozdravné procesy celého organismu.",
+  "servicesTitle": "Naše služby",
+  "servicesIntro": "Každá procedura je prováděna s důrazem na detail a relaxační zážitek. Spojuji staleté zkušenosti čínské medicíny s moderními poznatky o fasciích a svalové struktuře obličeje.",
+  "bookingTitle": "Rezervace termínu",
+  "bookingSuccessTitle": "Děkujeme za váš zájem!",
+  "bookingSuccessText": "Rezervační formulář byl úspěšně odeslán. Budeme vás kontaktovat telefonicky nebo e-mailem pro potvrzení přesného času ošetření.",
+  "aboutBadgeTitle": "TCM",
+  "aboutBadgeText": "Tradiční čínské metody",
+  "footerNote": "Inspirováno tradiční čínskou medicínou a péčí o zdraví.",
+  "seoTitle": "NatureLift | Přirozený lifting obličeje a TCM – Praha a Poděbrady",
+  "seoDescription": "NatureLift – přirozený lifting obličeje Gua Sha, baňkováním, bukálními masážemi a aurikuloterapií v Praze a Poděbradech. Omlazení a hluboké uvolnění inspirované tradiční čínskou medicínou.",
+  "locations": [
+    {
+      "name": "NatureLift Praha",
+      "street": "Londýnská 11",
+      "city": "Praha 2",
+      "region": "Praha"
+    },
+    {
+      "name": "NatureLift Poděbrady",
+      "street": "U Vlečky 49",
+      "city": "Poděbrady",
+      "region": "Středočeský kraj"
+    }
+  ]
 }

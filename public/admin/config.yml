@@ -36,17 +36,34 @@ collections:
         file: "src/data/settings.json"
         fields:
           - { label: "Jméno a příjmení terapeuta", name: "contactName", widget: "string" }
-          - { label: "Město / Adresa", name: "contactAddress", widget: "string" }
+          - { label: "Město / Adresa (text zobrazený v kontaktech)", name: "contactAddress", widget: "string" }
           - { label: "Telefon", name: "contactPhone", widget: "string" }
           - { label: "Email", name: "contactEmail", widget: "string" }
+          - label: "Provozovny (pro Google a mapy)"
+            name: "locations"
+            widget: "list"
+            required: false
+            summary: "{{fields.name}} – {{fields.street}}, {{fields.city}}"
+            hint: "Podle tohoto seznamu se vyhledávačům hlásí, kde ošetření probíhá. První provozovna je hlavní."
+            fields:
+              - { label: "Název provozovny", name: "name", widget: "string" }
+              - { label: "Ulice a číslo popisné", name: "street", widget: "string" }
+              - { label: "Město", name: "city", widget: "string" }
+              - { label: "Kraj", name: "region", widget: "string", required: false }
           - { label: "Hero podnadpis", name: "heroTagline", widget: "string" }
           - { label: "Hero nadpis", name: "heroTitle", widget: "string" }
           - { label: "Hero text", name: "heroDescription", widget: "text" }
+          - { label: "Titulek webu ve vyhledávači (max ~60 znaků)", name: "seoTitle", widget: "string", hint: "Zobrazí se jako nadpis odkazu v Googlu a při sdílení na sítích." }
+          - { label: "Popis webu ve vyhledávači (max ~155 znaků)", name: "seoDescription", widget: "text", hint: "Text pod odkazem ve výsledcích vyhledávání." }
           - { label: "O mně - Nadpis", name: "aboutTitle", widget: "string" }
           - { label: "O mně - Odstavec 1", name: "aboutText1", widget: "text" }
           - { label: "O mně - Odstavec 2", name: "aboutText2", widget: "text" }
           - { label: "O mně - Citát", name: "aboutQuote", widget: "string" }
           - { label: "O mně - Odstavec 3", name: "aboutText3", widget: "text" }
+          - { label: "O mně - Odznak u fotky (zkratka)", name: "aboutBadgeTitle", widget: "string" }
+          - { label: "O mně - Odznak u fotky (popisek)", name: "aboutBadgeText", widget: "string" }
+          - { label: "Služby - Nadpis sekce", name: "servicesTitle", widget: "string" }
+          - { label: "Služby - Úvodní text sekce", name: "servicesIntro", widget: "text" }
           - { label: "Proč přirozeně - Nadpis", name: "whyTitle", widget: "string" }
           - { label: "Proč přirozeně - Popis 1", name: "whyDescription1", widget: "text" }
           - { label: "Proč přirozeně - Popis 2", name: "whyDescription2", widget: "text" }
@@ -63,4 +80,8 @@ collections:
           - { label: "Ceník - Popis", name: "pricingDesc", widget: "text" }
           - { label: "Kontakt - Nadpis", name: "contactTitle", widget: "string" }
           - { label: "Kontakt - Popis", name: "contactDesc", widget: "text" }
-          - { label: "Adresa provozovny pro mapu (např. Poděbrady, náměstí T. G. Masaryka 1)", name: "mapAddress", widget: "string" }
+          - { label: "Adresa provozovny pro mapu (např. Praha 2, Londýnská 11)", name: "mapAddress", widget: "string" }
+          - { label: "Rezervace - Nadpis formuláře", name: "bookingTitle", widget: "string" }
+          - { label: "Rezervace - Nadpis po odeslání", name: "bookingSuccessTitle", widget: "string" }
+          - { label: "Rezervace - Text po odeslání", name: "bookingSuccessText", widget: "text" }
+          - { label: "Patička - Poznámka pod copyrightem", name: "footerNote", widget: "string" }
