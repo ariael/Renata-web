@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './App.css'
-import type { Service, HomepageSettings } from './fallbackData'
+import type { Service, HomepageSettings, VoucherPackage } from './fallbackData'
 import {
   SERVICES_FALLBACK_DATA,
   HOMEPAGE_SETTINGS_FALLBACK
@@ -13,6 +13,16 @@ function localToday(): string {
   const d = new Date()
   const offset = d.getTimezoneOffset() * 60000
   return new Date(d.getTime() - offset).toISOString().split('T')[0]
+}
+
+/** 4750 → „4 750 Kč" */
+function formatCzk(value: number): string {
+  return `${value.toLocaleString('cs-CZ').replace(/\s/g, '\u00A0')} Kč`
+}
+
+/** Hodnota poukazu ve výběru služeb v rezervačním formuláři. */
+function voucherServiceId(pkg: VoucherPackage): string {
+  return `poukaz-${pkg.count}`
 }
 
 export default function App() {
@@ -133,6 +143,16 @@ export default function App() {
 
   const todayStr = localToday()
 
+  // Cena jednoho ošetření bez balíčku – proti ní se počítá sleva u větších poukazů.
+  const basePricePerSession =
+    settings.voucherPackages.find((p) => p.count === 1)?.pricePerSession ??
+    Math.max(0, ...settings.voucherPackages.map((p) => p.pricePerSession))
+
+  // U objednávky poukazu nemá smysl vynucovat termín – ten si domluví obdarovaná.
+  const isVoucherSelected = settings.voucherPackages.some(
+    (p) => voucherServiceId(p) === formData.service
+  )
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
@@ -144,9 +164,15 @@ export default function App() {
     setFormError(false)
 
     const selectedService = services.find(s => s.id === formData.service)
-    const serviceLabel = selectedService
-      ? `${selectedService.title} (${selectedService.duration} / ${selectedService.price})`
-      : formData.service
+    const selectedVoucher = settings.voucherPackages.find(p => voucherServiceId(p) === formData.service)
+
+    let serviceLabel = formData.service
+    if (selectedService) {
+      serviceLabel = `${selectedService.title} (${selectedService.duration} / ${selectedService.price})`
+    } else if (selectedVoucher) {
+      const total = selectedVoucher.count * selectedVoucher.pricePerSession
+      serviceLabel = `DÁRKOVÝ POUKAZ – ${selectedVoucher.title}, ${selectedVoucher.count}× ošetření za ${formatCzk(total)}`
+    }
 
     // Past na roboty: pole je skryté, člověk ho nevyplní. Formspree takové
     // odeslání pod názvem `_gotcha` samo zahodí.
@@ -163,7 +189,9 @@ export default function App() {
           sluzba: serviceLabel,
           datum: formData.date,
           zprava: formData.message,
-          _subject: `Nová rezervace – ${formData.name}`,
+          _subject: selectedVoucher
+            ? `Objednávka dárkového poukazu (${selectedVoucher.count}×) – ${formData.name}`
+            : `Nová rezervace – ${formData.name}`,
           _gotcha: honeypot,
         }),
       })
@@ -251,6 +279,9 @@ export default function App() {
               </li>
               <li className="nav-item">
                 <a href="#cenik" onClick={closeMenu}>Ceník</a>
+              </li>
+              <li className="nav-item">
+                <a href="#poukazy" onClick={closeMenu}>Poukazy</a>
               </li>
               <li className="nav-item">
                 <a href="#kontakt" onClick={closeMenu}>Kontakt</a>
@@ -446,6 +477,75 @@ export default function App() {
         </div>
       </section>
 
+      {/* Gift Vouchers */}
+      <section id="poukazy" className="section">
+        <div className="container">
+          <div className="text-center vouchers-intro reveal reveal-fade">
+            <h2>{settings.vouchersTitle}</h2>
+            <p>{settings.vouchersIntro}</p>
+            {settings.vouchersScope && (
+              <p className="vouchers-scope">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" aria-hidden="true">
+                  <path d="M20 12v10H4V12M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+                </svg>
+                <span>{settings.vouchersScope}</span>
+              </p>
+            )}
+          </div>
+
+          <div className="voucher-grid">
+            {settings.voucherPackages.map((pkg) => {
+              const total = pkg.count * pkg.pricePerSession
+              const saving = basePricePerSession > pkg.pricePerSession
+                ? Math.round((1 - pkg.pricePerSession / basePricePerSession) * 100)
+                : 0
+
+              return (
+                <div
+                  className={`voucher-card reveal reveal-up${pkg.highlight ? ' voucher-card-highlight' : ''}`}
+                  key={`${pkg.count}-${pkg.pricePerSession}`}
+                >
+                  {pkg.highlight && <span className="voucher-badge">Nejčastější volba</span>}
+
+                  <div className="voucher-count">
+                    <span className="voucher-count-num">{pkg.count}×</span>
+                    <span className="voucher-count-label">ošetření</span>
+                  </div>
+
+                  <h3 className="voucher-title">{pkg.title}</h3>
+                  <p className="voucher-note">{pkg.note}</p>
+
+                  <div className="voucher-pricing">
+                    <div className="voucher-total">{formatCzk(total)}</div>
+                    {pkg.count > 1 && (
+                      <div className="voucher-per-session">
+                        {formatCzk(pkg.pricePerSession)} za ošetření
+                        {saving > 0 && <span className="voucher-saving">ušetříte {saving} %</span>}
+                      </div>
+                    )}
+                  </div>
+
+                  <a
+                    href="#rezervace"
+                    className={`btn ${pkg.highlight ? 'btn-primary' : 'btn-outline'} voucher-btn`}
+                    onClick={() => setFormData((prev) => ({
+                      ...prev,
+                      service: voucherServiceId(pkg)
+                    }))}
+                  >
+                    Objednat poukaz
+                  </a>
+                </div>
+              )
+            })}
+          </div>
+
+          {settings.vouchersNote && (
+            <p className="vouchers-fineprint reveal reveal-fade">{settings.vouchersNote}</p>
+          )}
+        </div>
+      </section>
+
       {/* Contact & Booking Section */}
       <section id="kontakt" className="section">
         {/* Botanical SVG background decoration */}
@@ -619,20 +719,33 @@ export default function App() {
                       onChange={handleInputChange}
                     >
                       <option value="">Vyberte ošetření...</option>
-                      {services.map((s) => (
-                        <option key={s.id} value={s.id}>
-                          {s.title} ({s.duration} / {s.price})
-                        </option>
-                      ))}
+                      <optgroup label="Ošetření">
+                        {services.map((s) => (
+                          <option key={s.id} value={s.id}>
+                            {s.title} ({s.duration} / {s.price})
+                          </option>
+                        ))}
+                      </optgroup>
+                      {settings.voucherPackages.length > 0 && (
+                        <optgroup label="Dárkové poukazy">
+                          {settings.voucherPackages.map((pkg) => (
+                            <option key={voucherServiceId(pkg)} value={voucherServiceId(pkg)}>
+                              Poukaz – {pkg.title} ({pkg.count}× / {formatCzk(pkg.count * pkg.pricePerSession)})
+                            </option>
+                          ))}
+                        </optgroup>
+                      )}
                     </select>
                   </div>
                   <div className="form-group">
-                    <label className="form-label" htmlFor="date">Preferované datum</label>
+                    <label className="form-label" htmlFor="date">
+                      Preferované datum{isVoucherSelected && <span className="form-label-optional"> (nepovinné)</span>}
+                    </label>
                     <input
                       type="date"
                       id="date"
                       name="date"
-                      required
+                      required={!isVoucherSelected}
                       min={todayStr}
                       className="form-control"
                       value={formData.date}
@@ -701,6 +814,7 @@ export default function App() {
             <li><a href="#sluzby">Služby</a></li>
             <li><a href="#proc">Proč přirozeně</a></li>
             <li><a href="#cenik">Ceník</a></li>
+            <li><a href="#poukazy">Poukazy</a></li>
             <li><a href="#kontakt">Kontakt</a></li>
           </ul>
           <div className="footer-copy">

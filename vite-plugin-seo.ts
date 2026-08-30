@@ -17,6 +17,12 @@ interface Location {
   region?: string
 }
 
+interface VoucherPackage {
+  count: number
+  title: string
+  pricePerSession: number
+}
+
 const DATA_DIR = 'src/data'
 const SITE_URL = 'https://naturelift.help'
 
@@ -63,6 +69,11 @@ function buildSeo(root: string) {
 
   const rawLocations = Array.isArray(settings.locations) ? (settings.locations as Location[]) : []
   const locations = rawLocations.filter((l) => l && (l.street || l.city))
+
+  const rawPackages = Array.isArray(settings.voucherPackages) ? (settings.voucherPackages as VoucherPackage[]) : []
+  const voucherPackages = rawPackages.filter(
+    (p) => p && Number(p.count) >= 1 && Number(p.pricePerSession) > 0 && p.title
+  )
 
   const toPostalAddress = (l: Location) => ({
     '@type': 'PostalAddress',
@@ -125,7 +136,23 @@ function buildSeo(root: string) {
           ...(firstSentence(s.shortDesc) ? { description: firstSentence(s.shortDesc) } : {})
         }
       }))
-    }
+    },
+    ...(voucherPackages.length > 0
+      ? {
+          makesOffer: voucherPackages.map((p) => ({
+            '@type': 'Offer',
+            name: `Dárkový poukaz – ${p.title}`,
+            price: String(p.count * p.pricePerSession),
+            priceCurrency: 'CZK',
+            category: 'Dárkový poukaz',
+            itemOffered: {
+              '@type': 'Service',
+              name: `Dárkový poukaz na ${p.count}× masáž obličeje`,
+              ...(settings.vouchersScope ? { description: String(settings.vouchersScope) } : {})
+            }
+          }))
+        }
+      : {})
   }
 
   return { title, description, jsonLd }

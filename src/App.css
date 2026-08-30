@@ -988,11 +988,14 @@ footer {
 }
 
 /* Mobile Menu Overlay
+   Zlom je 900px, ne 768px: sedm položek navigace se do užší hlavičky nevejde
+   a přetékalo by přes logo.
+
    Pozor: <header> má backdrop-filter, čímž se stává containing blockem pro
    position:fixed potomky. `bottom: 0` by se proto počítalo k 80px vysoké
    hlavičce a menu by zůstalo viditelné přes hero. Proto pevná výška a
    `visibility`, které schová menu bez ohledu na to, jak transform vyjde. */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .nav-menu {
     position: fixed;
     top: 80px;
@@ -1022,7 +1025,20 @@ footer {
   .menu-toggle {
     display: block;
   }
+}
 
+/* Mezi 901 a 1150 px je na sedm položek málo místa – stáhnout rozestupy. */
+@media (min-width: 901px) and (max-width: 1150px) {
+  .nav-menu {
+    gap: 1.4rem;
+  }
+
+  .nav-item a {
+    font-size: 0.98rem;
+  }
+}
+
+@media (max-width: 768px) {
   .form-row {
     grid-template-columns: 1fr;
     gap: 0;
@@ -1147,5 +1163,176 @@ textarea:focus-visible {
   .reveal {
     opacity: 1 !important;
     transform: none !important;
+  }
+}
+
+/* ===== Dárkové poukazy ===== */
+.vouchers-intro {
+  max-width: 720px;
+  margin: 0 auto 3.5rem auto;
+}
+
+.vouchers-scope {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  background-color: var(--accent-light);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 0.6rem 1.4rem;
+  margin: 0;
+  text-align: left;
+}
+
+.vouchers-scope svg {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.voucher-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  align-items: stretch;
+}
+
+.voucher-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 2.5rem 2rem 2rem;
+  box-shadow: var(--shadow);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.voucher-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--accent);
+}
+
+.voucher-card-highlight {
+  border-color: var(--accent);
+  border-width: 2px;
+}
+
+.voucher-badge {
+  position: absolute;
+  top: -0.85rem;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background-color: var(--accent);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 0.4rem 1.1rem;
+  border-radius: 50px;
+}
+
+.voucher-count {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.voucher-count-num {
+  font-family: var(--font-serif);
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.voucher-count-label {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.voucher-title {
+  font-size: 1.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.voucher-note {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  margin-bottom: 1.75rem;
+  flex-grow: 1;
+}
+
+.voucher-pricing {
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.voucher-total {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.voucher-per-session {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 0.4rem;
+}
+
+.voucher-saving {
+  background-color: var(--primary-light);
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 50px;
+}
+
+.voucher-btn {
+  width: 100%;
+}
+
+.vouchers-fineprint {
+  max-width: 720px;
+  margin: 3rem auto 0;
+  text-align: center;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  opacity: 0.85;
+}
+
+.form-label-optional {
+  font-weight: 400;
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+@media (max-width: 1024px) {
+  .voucher-grid {
+    grid-template-columns: 1fr;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .voucher-note {
+    flex-grow: 0;
   }
 }

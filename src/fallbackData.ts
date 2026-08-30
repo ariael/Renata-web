@@ -17,6 +17,16 @@ export interface Service {
   sortOrder?: number
 }
 
+export interface VoucherPackage {
+  /** Počet ošetření, na která poukaz platí. */
+  count: number
+  title: string
+  /** Cena za jedno ošetření v korunách; celková cena i sleva se dopočítají. */
+  pricePerSession: number
+  note: string
+  highlight?: boolean
+}
+
 export interface HomepageSettings {
   heroTagline: string
   heroTitle: string
@@ -57,6 +67,11 @@ export interface HomepageSettings {
   footerNote: string
   seoTitle: string
   seoDescription: string
+  vouchersTitle: string
+  vouchersIntro: string
+  vouchersScope: string
+  vouchersNote: string
+  voucherPackages: VoucherPackage[]
 }
 
 export const SERVICES_FALLBACK_DATA: Service[] = [
@@ -177,5 +192,30 @@ export const HOMEPAGE_SETTINGS_FALLBACK: HomepageSettings = {
   aboutBadgeText: 'Tradiční čínské metody',
   footerNote: 'Inspirováno tradiční čínskou medicínou a péčí o zdraví.',
   seoTitle: 'NatureLift | Přirozený lifting obličeje a TCM',
-  seoDescription: 'NatureLift – přirozený lifting obličeje Gua Sha, baňkováním, bukálními masážemi a aurikuloterapií. Omlazení a hluboké uvolnění inspirované tradiční čínskou medicínou.'
+  seoDescription: 'NatureLift – přirozený lifting obličeje Gua Sha, baňkováním, bukálními masážemi a aurikuloterapií. Omlazení a hluboké uvolnění inspirované tradiční čínskou medicínou.',
+  vouchersTitle: 'Dárkové poukazy',
+  vouchersIntro: 'Darujte místo věci chvíli péče. Poukaz vystavím na jméno obdarované a pošlu vám ho v tištěné podobě nebo e-mailem k vytištění.',
+  vouchersScope: '60minutová masáž obličeje dle výběru – bukální masáž, Gua Sha nebo baňkování.',
+  vouchersNote: 'Poukaz platí 12 měsíců od data vystavení. Termín si obdarovaná domluví telefonicky nebo přes rezervační formulář. Poukaz je přenosný a lze ho čerpat postupně.',
+  voucherPackages: [
+    {
+      count: 1,
+      title: 'Jedno ošetření',
+      pricePerSession: 1200,
+      note: 'Dárek na vyzkoušení – ideální, když si nejste jistí, co obdarovaná ocení.'
+    },
+    {
+      count: 5,
+      title: 'Pětice ošetření',
+      pricePerSession: 950,
+      note: 'Doporučená kúra. Pět ošetření po sobě je minimum, u kterého je výsledek opravdu vidět.',
+      highlight: true
+    },
+    {
+      count: 10,
+      title: 'Desítka ošetření',
+      pricePerSession: 850,
+      note: 'Nejvýhodnější varianta pro pravidelnou péči po celý rok.'
+    }
+  ]
 }

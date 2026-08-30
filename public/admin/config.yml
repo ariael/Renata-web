@@ -78,6 +78,21 @@ collections:
           - { label: "Karta 4 - Popis", name: "card4Desc", widget: "text" }
           - { label: "Ceník - Nadpis", name: "pricingTitle", widget: "string" }
           - { label: "Ceník - Popis", name: "pricingDesc", widget: "text" }
+          - { label: "Poukazy - Nadpis sekce", name: "vouchersTitle", widget: "string" }
+          - { label: "Poukazy - Úvodní text", name: "vouchersIntro", widget: "text" }
+          - { label: "Poukazy - Na co poukaz platí", name: "vouchersScope", widget: "string" }
+          - { label: "Poukazy - Podmínky (malý text pod balíčky)", name: "vouchersNote", widget: "text" }
+          - label: "Poukazy - Balíčky"
+            name: "voucherPackages"
+            widget: "list"
+            summary: "{{fields.count}}× {{fields.title}} – {{fields.pricePerSession}} Kč za ošetření"
+            hint: "Celková cena i sleva se dopočítají samy. Sleva se počítá proti balíčku s počtem 1, ten proto nechte v seznamu."
+            fields:
+              - { label: "Počet ošetření", name: "count", widget: "number", value_type: "int", min: 1 }
+              - { label: "Název balíčku", name: "title", widget: "string" }
+              - { label: "Cena za jedno ošetření (jen číslo, v Kč)", name: "pricePerSession", widget: "number", value_type: "int", min: 1 }
+              - { label: "Popisek", name: "note", widget: "text" }
+              - { label: "Zvýraznit jako doporučenou volbu", name: "highlight", widget: "boolean", required: false, default: false }
           - { label: "Kontakt - Nadpis", name: "contactTitle", widget: "string" }
           - { label: "Kontakt - Popis", name: "contactDesc", widget: "text" }
           - { label: "Adresa provozovny pro mapu (např. Praha 2, Londýnská 11)", name: "mapAddress", widget: "string" }
