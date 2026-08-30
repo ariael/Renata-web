@@ -60,20 +60,37 @@
     "currenciesAccepted": "CZK",
     "address": {
       "@type": "PostalAddress",
-      "addressLocality": "Poděbrady",
-      "addressRegion": "Středočeský kraj",
-      "postalCode": "290 01",
+      "streetAddress": "Londýnská 11",
+      "addressLocality": "Praha 2",
       "addressCountry": "CZ"
     },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": 50.1428,
-      "longitude": 15.1189
-    },
-    "areaServed": {
-      "@type": "City",
-      "name": "Poděbrady"
-    },
+    "location": [
+      {
+        "@type": "Place",
+        "name": "NatureLift Praha",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Londýnská 11",
+          "addressLocality": "Praha 2",
+          "addressCountry": "CZ"
+        }
+      },
+      {
+        "@type": "Place",
+        "name": "NatureLift Poděbrady",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "U Vlečky 49",
+          "addressLocality": "Poděbrady",
+          "addressRegion": "Středočeský kraj",
+          "addressCountry": "CZ"
+        }
+      }
+    ],
+    "areaServed": [
+      { "@type": "City", "name": "Praha" },
+      { "@type": "City", "name": "Poděbrady" }
+    ],
     "knowsLanguage": "cs",
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
@@ -91,7 +108,7 @@
         },
         {
           "@type": "Offer",
-          "price": "700",
+          "price": "850",
           "priceCurrency": "CZK",
           "itemOffered": {
             "@type": "Service",
