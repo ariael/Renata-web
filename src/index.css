@@ -388,6 +388,13 @@ header.scrolled .logo-subtitle {
   animation: bounceIndicator 2s infinite;
 }
 
+/* Na mobilu by se dekorativní šipka kryla s tlačítky v hero sekci */
+@media (max-width: 600px) {
+  .hero-scroll-indicator {
+    display: none;
+  }
+}
+
 @keyframes bounceIndicator {
   0%, 20%, 50%, 80%, 100% {
     transform: translateY(0);

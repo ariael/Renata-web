@@ -12,6 +12,15 @@ aurikuloterapie). Klientka: **Renata Tomášová, Poděbrady**.
 - **Formspree** pro odesílání rezervačního formuláře
 - Hosting **Netlify** (auto-deploy z větve `master`)
 
+## Značka
+
+Logo je didone monogram „N“ v tenkém zlatém kroužku – čistý vektor bez závislosti na fontu:
+
+- [src/Logo.tsx](src/Logo.tsx) – `LogoMark` (hlavička) a `LogoStacked` (patička); barvy se
+  berou z CSS proměnných, takže se samy přizpůsobí světlému i tmavému režimu
+- [public/favicon.svg](public/favicon.svg) – stejné tvary jako favicon
+- [public/og-image.jpg](public/og-image.jpg) – náhled 1200 × 630 pro sdílení na sociálních sítích
+
 ## Obsah a CMS
 
 Obsah žije v JSON souborech, které edituje Decap CMS na `/admin/`:
@@ -20,6 +29,10 @@ Obsah žije v JSON souborech, které edituje Decap CMS na `/admin/`:
 - [src/data/services/](src/data/services/) – jedna služba = jeden `.json` soubor
 - [src/fallbackData.ts](src/fallbackData.ts) – záložní data, pokud JSON chybí
 - Obrázky: `public/assets/` (ve formátu **WebP**)
+
+Build výstup jde do `dist/build/` (soubory s hashem, cachují se natrvalo), zatímco
+`dist/assets/` zůstává pro obrázky z CMS s pevným názvem – cachovací pravidla jsou
+v [netlify.toml](netlify.toml).
 
 Po uložení v CMS vznikne commit na GitHubu → Netlify automaticky sestaví a nasadí web (~1–2 min).
 

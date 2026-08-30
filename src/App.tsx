@@ -1,11 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './App.css'
 import type { Service, HomepageSettings } from './fallbackData'
-import { 
-  SERVICES_FALLBACK_DATA, 
-  HOMEPAGE_SETTINGS_FALLBACK 
+import {
+  SERVICES_FALLBACK_DATA,
+  HOMEPAGE_SETTINGS_FALLBACK
 } from './fallbackData'
 import { fetchServices, fetchHomepageSettings } from './cmsClient'
+import { LogoMark, LogoStacked } from './Logo'
+
+/** Dnešní datum v místní zóně (toISOString by vrátil UTC a večer by povolil včerejšek). */
+function localToday(): string {
+  const d = new Date()
+  const offset = d.getTimezoneOffset() * 60000
+  return new Date(d.getTime() - offset).toISOString().split('T')[0]
+}
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -24,6 +32,8 @@ export default function App() {
   const [formError, setFormError] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isFormSending, setIsFormSending] = useState(false)
+  const modalRef = useRef<HTMLDivElement>(null)
+  const lastFocusedRef = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
     async function loadCMSData() {
@@ -64,10 +74,54 @@ export default function App() {
     }
   }, [services, settings])
 
+  // Modální okno: zamknout scroll, přesunout fokus dovnitř, držet ho uvnitř
+  // a po zavření ho vrátit na tlačítko, ze kterého se okno otevřelo.
   useEffect(() => {
     if (!activeService) return
+    lastFocusedRef.current = document.activeElement as HTMLElement
+
+    const focusables = () =>
+      Array.from(
+        modalRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        ) ?? []
+      )
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setActiveService(null)
+      if (e.key === 'Escape') {
+        setActiveService(null)
+        return
+      }
+      if (e.key !== 'Tab') return
+      const items = focusables()
+      if (items.length === 0) return
+      const first = items[0]
+      const last = items[items.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    document.body.style.overflow = 'hidden'
+    focusables()[0]?.focus()
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = ''
+      lastFocusedRef.current?.focus()
+    }
+  }, [activeService])
+
+  // Mobilní menu: zavřít Escapem a nescrollovat stránkou pod ním.
+  useEffect(() => {
+    if (!isMenuOpen) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsMenuOpen(false)
     }
     document.addEventListener('keydown', handleKeyDown)
     document.body.style.overflow = 'hidden'
@@ -75,9 +129,9 @@ export default function App() {
       document.removeEventListener('keydown', handleKeyDown)
       document.body.style.overflow = ''
     }
-  }, [activeService])
+  }, [isMenuOpen])
 
-  const todayStr = new Date().toISOString().split('T')[0]
+  const todayStr = localToday()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -94,6 +148,10 @@ export default function App() {
       ? `${selectedService.title} (${selectedService.duration} / ${selectedService.price})`
       : formData.service
 
+    // Past na roboty: pole je skryté, člověk ho nevyplní. Formspree takové
+    // odeslání pod názvem `_gotcha` samo zahodí.
+    const honeypot = (e.target as HTMLFormElement).querySelector<HTMLInputElement>('input[name="_gotcha"]')?.value ?? ''
+
     try {
       const response = await fetch('https://formspree.io/f/mpqnbyqe', {
         method: 'POST',
@@ -106,6 +164,7 @@ export default function App() {
           datum: formData.date,
           zprava: formData.message,
           _subject: `Nová rezervace – ${formData.name}`,
+          _gotcha: honeypot,
         }),
       })
 
@@ -150,16 +209,27 @@ export default function App() {
 
   return (
     <>
+      <a href="#obsah" className="skip-link">Přeskočit na obsah</a>
+
       {/* Header */}
       <header className={isScrolled ? 'scrolled' : ''}>
         <div className="container nav-container">
-          <a href="#" className="logo-link" onClick={closeMenu}>
-            <span className="logo-title">NatureLift</span>
-            <span className="logo-subtitle">{settings.contactName}</span>
+          <a href="#" className="logo-link" onClick={closeMenu} aria-label="NatureLift – úvodní stránka">
+            <LogoMark className="logo-mark" size={44} />
+            <span className="logo-words">
+              <span className="logo-title">NatureLift</span>
+              <span className="logo-subtitle">{settings.contactName}</span>
+            </span>
           </a>
 
-          <button className="menu-toggle" onClick={toggleMenu} aria-label="Menu">
-            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" strokeWidth="2" fill="none">
+          <button
+            className="menu-toggle"
+            onClick={toggleMenu}
+            aria-label={isMenuOpen ? 'Zavřít menu' : 'Otevřít menu'}
+            aria-expanded={isMenuOpen}
+            aria-controls="hlavni-menu"
+          >
+            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" strokeWidth="2" fill="none" aria-hidden="true">
               {isMenuOpen ? (
                 <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
               ) : (
@@ -168,8 +238,8 @@ export default function App() {
             </svg>
           </button>
 
-          <nav>
-            <ul className={`nav-menu ${isMenuOpen ? 'open' : ''}`}>
+          <nav aria-label="Hlavní navigace">
+            <ul id="hlavni-menu" className={`nav-menu ${isMenuOpen ? 'open' : ''}`}>
               <li className="nav-item">
                 <a href="#omne" onClick={closeMenu}>O mně</a>
               </li>
@@ -195,6 +265,7 @@ export default function App() {
         </div>
       </header>
 
+      <main id="obsah">
       {/* Hero Section */}
       <section className="hero-section">
         <div className="container">
@@ -235,7 +306,7 @@ export default function App() {
         <div className="container">
           <div className="grid grid-2 about-grid">
             <div className="about-image-wrapper reveal reveal-left">
-              <img src={services.find(s => s.id === 'guasha')?.image || services[0]?.image} alt={`${settings.contactName} - NatureLift`} className="about-image" loading="lazy" width="600" height="600" />
+              <img src={services.find(s => s.id === 'guasha')?.image || services[0]?.image} alt="Ošetření obličeje nefritovým kamenem Gua Sha v salonu NatureLift" className="about-image" loading="lazy" width="600" height="750" />
               <div className="about-badge">
                 <div className="about-badge-num">TCM</div>
                 <div className="about-badge-text">Tradiční čínské metody</div>
@@ -316,7 +387,7 @@ export default function App() {
                       <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                     </svg>
                   </div>
-                  <h4>{settings.card1Title}</h4>
+                  <h3 className="why-card-title">{settings.card1Title}</h3>
                   <p>{settings.card1Desc}</p>
                 </div>
                 <div className="why-card reveal reveal-up">
@@ -325,7 +396,7 @@ export default function App() {
                       <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                     </svg>
                   </div>
-                  <h4>{settings.card2Title}</h4>
+                  <h3 className="why-card-title">{settings.card2Title}</h3>
                   <p>{settings.card2Desc}</p>
                 </div>
                 <div className="why-card reveal reveal-up">
@@ -334,7 +405,7 @@ export default function App() {
                       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                     </svg>
                   </div>
-                  <h4>{settings.card3Title}</h4>
+                  <h3 className="why-card-title">{settings.card3Title}</h3>
                   <p>{settings.card3Desc}</p>
                 </div>
                 <div className="why-card reveal reveal-up">
@@ -344,7 +415,7 @@ export default function App() {
                       <path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" />
                     </svg>
                   </div>
-                  <h4>{settings.card4Title}</h4>
+                  <h3 className="why-card-title">{settings.card4Title}</h3>
                   <p>{settings.card4Desc}</p>
                 </div>
               </div>
@@ -463,14 +534,14 @@ export default function App() {
               <h2 className="booking-form-title">Rezervace termínu</h2>
               
               {isFormSending && (
-                <div className="form-loading-overlay">
+                <div className="form-loading-overlay" role="status" aria-live="polite">
                   <div className="spinner"></div>
                   <p>Odesílám rezervaci...</p>
                 </div>
               )}
 
               {formSubmitted && (
-                <div className="form-success-message animate-success">
+                <div className="form-success-message animate-success" role="status" aria-live="polite">
                   <div className="success-checkmark">
                     <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" strokeWidth="3" fill="none">
                       <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" className="checkmark-circle" />
@@ -485,7 +556,7 @@ export default function App() {
               )}
 
               {formError && (
-                <div className="form-error-message">
+                <div className="form-error-message" role="alert">
                   <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" strokeWidth="2" fill="none" style={{ flexShrink: 0 }}>
                     <circle cx="12" cy="12" r="10" />
                     <line x1="12" y1="8" x2="12" y2="12" />
@@ -585,9 +656,27 @@ export default function App() {
                   />
                 </div>
 
+                {/* Past na roboty – pro člověka neviditelná, proto i aria-hidden. */}
+                <input
+                  type="text"
+                  name="_gotcha"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="hp-field"
+                />
+
                 <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '0.5rem' }}>
                   Odeslat nezávaznou rezervaci
                 </button>
+
+                <p className="form-privacy-note">
+                  Odesláním formuláře berete na vědomí, že {settings.contactName} zpracuje uvedené
+                  osobní údaje (jméno, e-mail, telefon) výhradně za účelem domluvy termínu ošetření.
+                  Údaje nepředáváme třetím stranám a smažeme je, jakmile přestanou být potřeba.
+                  Kdykoliv můžete požádat o jejich výmaz na{' '}
+                  <a href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a>.
+                </p>
               </form>
             </div>
           </div>
@@ -604,11 +693,12 @@ export default function App() {
         </div>
       </section>
 
+      </main>
+
       {/* Footer */}
       <footer>
         <div className="container">
-          <div className="footer-logo">NatureLift</div>
-          <div className="footer-subtitle">{settings.contactName}</div>
+          <LogoStacked subtitle={settings.contactName} />
           <ul className="footer-nav">
             <li><a href="#omne">O mně</a></li>
             <li><a href="#sluzby">Služby</a></li>
@@ -629,7 +719,7 @@ export default function App() {
       {/* Service Details Modal */}
       {activeService && (
         <div className="modal-overlay" onClick={() => setActiveService(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={activeService.title}>
+          <div ref={modalRef} className="modal-content" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={activeService.title}>
             <button className="modal-close" onClick={() => setActiveService(null)} aria-label="Zavřít">
               <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2.5" fill="none">
                 <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />

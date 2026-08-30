@@ -17,8 +17,36 @@ header {
 
 .logo-link {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
   text-decoration: none;
+  color: var(--text-primary);
+}
+
+.logo-mark {
+  flex-shrink: 0;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.logo-link:hover .logo-mark {
+  transform: rotate(-6deg) scale(1.04);
+}
+
+.logo-words {
+  display: flex;
+  flex-direction: column;
+}
+
+header.scrolled .logo-mark {
+  width: 38px;
+  height: 38px;
+}
+
+@media (max-width: 480px) {
+  .logo-mark {
+    width: 36px;
+    height: 36px;
+  }
 }
 
 .logo-title {
@@ -95,7 +123,7 @@ header {
       rgba(253, 251, 247, 0.45) 0%,
       rgba(253, 251, 247, 0.95) 100%
     ),
-    url('./assets/hero_bg.webp');
+    url('/assets/hero_bg.webp');
   background-size: cover;
   background-position: center;
   padding-top: 100px;
@@ -108,7 +136,7 @@ header {
         rgba(18, 22, 19, 0.45) 0%,
         rgba(18, 22, 19, 0.95) 100%
       ),
-      url('./assets/hero_bg.webp');
+      url('/assets/hero_bg.webp');
   }
 }
 
@@ -139,6 +167,7 @@ header {
 
 .hero-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 1.25rem;
 }
 
@@ -385,7 +414,7 @@ header {
   margin-bottom: 1.5rem;
 }
 
-.why-card h4 {
+.why-card-title {
   font-size: 1.3rem;
   font-family: var(--font-sans);
   font-weight: 600;
@@ -906,20 +935,32 @@ footer {
   text-align: center;
 }
 
-.footer-logo {
-  font-family: var(--font-serif);
-  font-size: 1.8rem;
-  font-weight: 700;
+/* Značka v patičce – znak, název, jméno terapeutky */
+.logo-stacked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   color: var(--text-primary);
-  margin-bottom: 0.5rem;
+  margin-bottom: 2rem;
 }
 
-.footer-subtitle {
-  font-size: 0.8rem;
+.logo-stacked-name {
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  margin-top: 0.6rem;
+}
+
+.logo-stacked-sub {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  text-indent: 0.22em;
   color: var(--accent);
-  margin-bottom: 2rem;
+  margin-top: 0.5rem;
 }
 
 .footer-nav {
@@ -946,27 +987,36 @@ footer {
   color: var(--text-secondary);
 }
 
-/* Mobile Menu Overlay */
+/* Mobile Menu Overlay
+   Pozor: <header> má backdrop-filter, čímž se stává containing blockem pro
+   position:fixed potomky. `bottom: 0` by se proto počítalo k 80px vysoké
+   hlavičce a menu by zůstalo viditelné přes hero. Proto pevná výška a
+   `visibility`, které schová menu bez ohledu na to, jak transform vyjde. */
 @media (max-width: 768px) {
   .nav-menu {
     position: fixed;
     top: 80px;
     left: 0;
     right: 0;
-    bottom: 0;
+    height: calc(100dvh - 80px);
+    overflow-y: auto;
     background-color: var(--bg-primary);
     flex-direction: column;
     padding: 3rem 2rem;
     gap: 2rem;
     align-items: center;
+    justify-content: flex-start;
     z-index: 999;
-    transform: translateY(-120%);
-    transition: transform 0.4s ease-in-out;
+    transform: translateY(-110%);
+    visibility: hidden;
+    transition: transform 0.4s ease-in-out, visibility 0s linear 0.4s;
     border-bottom: 1px solid var(--border);
   }
 
   .nav-menu.open {
     transform: translateY(0);
+    visibility: visible;
+    transition: transform 0.4s ease-in-out, visibility 0s;
   }
 
   .menu-toggle {
@@ -1021,4 +1071,81 @@ footer {
 /* Nav link active state */
 .nav-item a.active {
   color: var(--accent);
+}
+
+/* Odkaz pro přeskočení navigace (viditelný až při tabování) */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 2000;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0 0 10px 10px;
+  background-color: var(--primary);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Past na roboty – schovaná tak, aby ji nenašly ani čtečky */
+.hp-field {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Informace o zpracování osobních údajů pod formulářem */
+.form-privacy-note {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 1rem 0 0;
+  opacity: 0.85;
+}
+
+.form-privacy-note a {
+  color: var(--accent);
+}
+
+/* Viditelný fokus pro ovládání klávesnicí */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Respektovat systémové nastavení „omezit pohyb“ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
