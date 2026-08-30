@@ -42,9 +42,16 @@ function parseVoucherPackages(value: unknown): VoucherPackage[] {
       title,
       pricePerSession,
       note: text(item, 'note') ?? '',
+      badge: text(item, 'badge'),
       highlight: item.highlight === true
     }]
   })
+}
+
+/** Číselný údaj z CMS; number widget vrací číslo, ruční editace může dát i text. */
+function number(value: unknown): number | undefined {
+  const parsed = Number(value)
+  return Number.isFinite(parsed) ? parsed : undefined
 }
 
 /** Vrátí první vyplněný textový údaj – zkouší camelCase i snake_case název. */
@@ -140,6 +147,16 @@ export async function fetchHomepageSettings(): Promise<HomepageSettings> {
 
     const packages = parseVoucherPackages(item.voucherPackages ?? item.voucher_packages)
     if (packages.length > 0) settings.voucherPackages = packages
+
+    settings.introOfferPrice = number(item.introOfferPrice) ?? HOMEPAGE_SETTINGS_FALLBACK.introOfferPrice
+    settings.introOfferRegularPrice =
+      number(item.introOfferRegularPrice) ?? HOMEPAGE_SETTINGS_FALLBACK.introOfferRegularPrice
+
+    if (Array.isArray(item.introOfferConditions)) {
+      settings.introOfferConditions = item.introOfferConditions
+        .map((c) => (typeof c === 'string' ? c : typeof c === 'object' && c ? text(c as RawRecord, 'text', 'condition') : undefined))
+        .filter((c): c is string => Boolean(c))
+    }
 
     return settings
   } catch (error) {

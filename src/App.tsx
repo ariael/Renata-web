@@ -20,6 +20,14 @@ function formatCzk(value: number): string {
   return `${value.toLocaleString('cs-CZ').replace(/\s/g, '\u00A0')} Kč`
 }
 
+/** „2026-12-31" → „31. 12. 2026"; neplatný vstup vrátí prázdný text. */
+function czDate(iso: string): string {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso.trim())
+  if (!match) return ''
+  const [, year, month, day] = match
+  return `${Number(day)}. ${Number(month)}. ${year}`
+}
+
 /** Hodnota poukazu ve výběru služeb v rezervačním formuláři. */
 function voucherServiceId(pkg: VoucherPackage): string {
   return `poukaz-${pkg.count}`
@@ -36,6 +44,7 @@ export default function App() {
     phone: '',
     service: '',
     date: '',
+    referral: '',
     message: ''
   })
   const [formSubmitted, setFormSubmitted] = useState(false)
@@ -188,6 +197,7 @@ export default function App() {
           telefon: formData.phone,
           sluzba: serviceLabel,
           datum: formData.date,
+          doporucila: formData.referral || '—',
           zprava: formData.message,
           _subject: selectedVoucher
             ? `Objednávka dárkového poukazu (${selectedVoucher.count}×) – ${formData.name}`
@@ -198,7 +208,7 @@ export default function App() {
 
       if (response.ok) {
         setFormSubmitted(true)
-        setFormData({ name: '', email: '', phone: '', service: '', date: '', message: '' })
+        setFormData({ name: '', email: '', phone: '', service: '', date: '', referral: '', message: '' })
         setTimeout(() => setFormSubmitted(false), 10000)
       } else {
         setFormError(true)
@@ -460,6 +470,43 @@ export default function App() {
             <p>{highlightText(settings.pricingDesc)}</p>
           </div>
 
+          {settings.introOfferPrice > 0 && (
+            <div className="intro-offer reveal reveal-up">
+              <div className="intro-offer-figure">
+                <span className="intro-offer-eyebrow">{settings.introOfferTitle}</span>
+                <div className="intro-offer-amount">
+                  <span className="intro-offer-now">{formatCzk(settings.introOfferPrice)}</span>
+                  {settings.introOfferRegularPrice > settings.introOfferPrice && (
+                    <span className="intro-offer-was">
+                      <span className="sr-only">běžná cena </span>
+                      <s>{formatCzk(settings.introOfferRegularPrice)}</s>
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="intro-offer-body">
+                <p className="intro-offer-lead">{settings.introOfferLead}</p>
+                <ul className="intro-offer-conditions">
+                  {settings.introOfferConditions.map((condition, idx) => (
+                    <li key={idx}>
+                      <svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" strokeWidth="2.5" fill="none" aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      <span>{condition}</span>
+                    </li>
+                  ))}
+                </ul>
+                {(settings.introOfferUntil || settings.introOfferNote) && (
+                  <p className="intro-offer-note">
+                    {settings.introOfferUntil && <strong>Platí do {czDate(settings.introOfferUntil)}. </strong>}
+                    {settings.introOfferNote}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
           <div className="pricing-table-container reveal reveal-up">
             {services.map((service) => (
               <div className="pricing-row" key={service.id}>
@@ -505,7 +552,7 @@ export default function App() {
                   className={`voucher-card reveal reveal-up${pkg.highlight ? ' voucher-card-highlight' : ''}`}
                   key={`${pkg.count}-${pkg.pricePerSession}`}
                 >
-                  {pkg.highlight && <span className="voucher-badge">Nejčastější volba</span>}
+                  {pkg.highlight && <span className="voucher-badge">{pkg.badge || 'Nejčastější volba'}</span>}
 
                   <div className="voucher-count">
                     <span className="voucher-count-num">{pkg.count}×</span>
@@ -592,6 +639,19 @@ export default function App() {
                   <div>
                     <div className="contact-item-title">Kde mě najdete</div>
                     <div className="contact-item-val">{settings.contactAddress}</div>
+                  </div>
+                </div>
+
+                <div className="contact-item">
+                  <div className="contact-icon">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none">
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="contact-item-title">Kdy se objednat</div>
+                    <div className="contact-item-val contact-item-note">{settings.contactAvailability}</div>
                   </div>
                 </div>
 
@@ -752,6 +812,24 @@ export default function App() {
                       onChange={handleInputChange}
                     />
                   </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label" htmlFor="referral">
+                    Kdo vás doporučil? <span className="form-label-optional">(nepovinné)</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="referral"
+                    name="referral"
+                    className="form-control"
+                    placeholder="Např. Jana Nováková"
+                    value={formData.referral}
+                    onChange={handleInputChange}
+                  />
+                  <p className="form-field-hint">
+                    Díky tomu můžu uplatnit zaváděcí cenu vám i té, která vás poslala.
+                  </p>
                 </div>
 
                 <div className="form-group">

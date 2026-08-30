@@ -1,3 +1,4 @@
+import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { seoFromCms } from './vite-plugin-seo'
@@ -10,5 +11,13 @@ export default defineConfig({
     // stranou od /assets/, kam Decap CMS ukládá obrázky s pevným názvem.
     // Cachovací pravidla jsou v netlify.toml.
     assetsDir: 'build',
+    rollupOptions: {
+      input: {
+        // Web samotný
+        main: resolve(__dirname, 'index.html'),
+        // Interní generátor poukazů – samostatná stránka, na web nikde neodkazuje
+        poukazy: resolve(__dirname, 'interni/poukazy/index.html'),
+      },
+    },
   },
 })

@@ -18,6 +18,8 @@ export interface Service {
 }
 
 export interface VoucherPackage {
+  /** Text štítku nad kartou; když chybí, použije se výchozí. */
+  badge?: string
   /** Počet ošetření, na která poukaz platí. */
   count: number
   title: string
@@ -56,6 +58,7 @@ export interface HomepageSettings {
   contactAddress: string
   contactPhone: string
   contactEmail: string
+  contactAvailability: string
   mapAddress: string
   servicesTitle: string
   servicesIntro: string
@@ -72,6 +75,15 @@ export interface HomepageSettings {
   vouchersScope: string
   vouchersNote: string
   voucherPackages: VoucherPackage[]
+  introOfferTitle: string
+  introOfferLead: string
+  /** 0 = zaváděcí nabídku nezobrazovat. */
+  introOfferPrice: number
+  introOfferRegularPrice: number
+  introOfferConditions: string[]
+  /** Datum ve tvaru RRRR-MM-DD; prázdné = bez uvedeného konce. */
+  introOfferUntil: string
+  introOfferNote: string
 }
 
 export const SERVICES_FALLBACK_DATA: Service[] = [
@@ -182,6 +194,7 @@ export const HOMEPAGE_SETTINGS_FALLBACK: HomepageSettings = {
   contactAddress: 'Poděbrady',
   contactPhone: '+420 733 783 125',
   contactEmail: 'renata.tomasova@seznam.cz',
+  contactAvailability: 'Vždy po předchozí domluvě – pevná otevírací doba není, termín si domluvíme telefonicky nebo přes rezervační formulář.',
   mapAddress: 'Poděbrady, Czech Republic',
   servicesTitle: 'Naše služby',
   servicesIntro: 'Každá procedura je prováděna s důrazem na detail a relaxační zážitek. Spojuji staleté zkušenosti čínské medicíny s moderními poznatky o fasciích a svalové struktuře obličeje.',
@@ -209,6 +222,7 @@ export const HOMEPAGE_SETTINGS_FALLBACK: HomepageSettings = {
       title: 'Pětice ošetření',
       pricePerSession: 950,
       note: 'Doporučená kúra. Pět ošetření po sobě je minimum, u kterého je výsledek opravdu vidět.',
+      badge: 'Zaváděcí cena',
       highlight: true
     },
     {
@@ -217,5 +231,16 @@ export const HOMEPAGE_SETTINGS_FALLBACK: HomepageSettings = {
       pricePerSession: 850,
       note: 'Nejvýhodnější varianta pro pravidelnou péči po celý rok.'
     }
-  ]
+  ],
+  introOfferTitle: 'Zaváděcí cena',
+  introOfferLead: '60minutová masáž obličeje za 950 Kč místo běžných 1 200 Kč. Zaváděcí cenu dostanete, pokud pro vás platí alespoň jedna z těchto věcí:',
+  introOfferPrice: 950,
+  introOfferRegularPrice: 1200,
+  introOfferConditions: [
+    'Jdete ke mně poprvé.',
+    'Doporučíte mě někomu, kdo na ošetření skutečně přijde.',
+    'Vezmete si balíček alespoň pěti ošetření.'
+  ],
+  introOfferUntil: '',
+  introOfferNote: 'Zaváděcí cenu uplatním při domluvě termínu – stačí se zmínit, která z podmínek pro vás platí.'
 }

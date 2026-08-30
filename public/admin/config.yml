@@ -39,6 +39,7 @@ collections:
           - { label: "Město / Adresa (text zobrazený v kontaktech)", name: "contactAddress", widget: "string" }
           - { label: "Telefon", name: "contactPhone", widget: "string" }
           - { label: "Email", name: "contactEmail", widget: "string" }
+          - { label: "Kdy se objednat (místo otevírací doby)", name: "contactAvailability", widget: "text", hint: "Zobrazí se v kontaktech. Pevná otevírací doba se na webu záměrně neuvádí." }
           - label: "Provozovny (pro Google a mapy)"
             name: "locations"
             widget: "list"
@@ -78,6 +79,17 @@ collections:
           - { label: "Karta 4 - Popis", name: "card4Desc", widget: "text" }
           - { label: "Ceník - Nadpis", name: "pricingTitle", widget: "string" }
           - { label: "Ceník - Popis", name: "pricingDesc", widget: "text" }
+          - { label: "Zaváděcí nabídka - Titulek štítku", name: "introOfferTitle", widget: "string" }
+          - { label: "Zaváděcí nabídka - Zaváděcí cena (jen číslo, 0 = nabídku skrýt)", name: "introOfferPrice", widget: "number", value_type: "int", min: 0 }
+          - { label: "Zaváděcí nabídka - Běžná cena (jen číslo)", name: "introOfferRegularPrice", widget: "number", value_type: "int", min: 0 }
+          - { label: "Zaváděcí nabídka - Úvodní věta", name: "introOfferLead", widget: "text" }
+          - label: "Zaváděcí nabídka - Podmínky"
+            name: "introOfferConditions"
+            widget: "list"
+            field: { label: "Podmínka", name: "condition", widget: "string" }
+            hint: "Stačí splnit jednu z nich. Vypíší se s odškrtávacím zaškrtnutím."
+          - { label: "Zaváděcí nabídka - Platí do (RRRR-MM-DD, prázdné = neuvádět)", name: "introOfferUntil", widget: "string", required: false }
+          - { label: "Zaváděcí nabídka - Poznámka pod podmínkami", name: "introOfferNote", widget: "text" }
           - { label: "Poukazy - Nadpis sekce", name: "vouchersTitle", widget: "string" }
           - { label: "Poukazy - Úvodní text", name: "vouchersIntro", widget: "text" }
           - { label: "Poukazy - Na co poukaz platí", name: "vouchersScope", widget: "string" }
@@ -92,6 +104,7 @@ collections:
               - { label: "Název balíčku", name: "title", widget: "string" }
               - { label: "Cena za jedno ošetření (jen číslo, v Kč)", name: "pricePerSession", widget: "number", value_type: "int", min: 1 }
               - { label: "Popisek", name: "note", widget: "text" }
+              - { label: "Text štítku nad kartou (nepovinné)", name: "badge", widget: "string", required: false }
               - { label: "Zvýraznit jako doporučenou volbu", name: "highlight", widget: "boolean", required: false, default: false }
           - { label: "Kontakt - Nadpis", name: "contactTitle", widget: "string" }
           - { label: "Kontakt - Popis", name: "contactDesc", widget: "text" }

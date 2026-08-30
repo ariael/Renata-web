@@ -10,7 +10,7 @@
   "pricingTitle": "Ceník služeb",
   "card2Desc": "Uvolněním napjatých fascií rozproudíme tok lymfy, což eliminuje otoky a vyčistí pokožku.",
   "card3Desc": "Jemná stimulace bodů na uchu a uvolnění čelistního napětí působí blahodárně na celou psychiku.",
-  "heroTagline": "Přírodní omlazení v Poděbradech a v Praze",
+  "heroTagline": "Přírodní omlazení v Praze a v Poděbradech",
   "card4Title": "Bez jehel a chemie",
   "contactAddress": "Praha 2, Londýnská 11 / Poděbrady, U Vlečky 49",
   "card3Title": "Uvolnění stresu",
@@ -22,7 +22,7 @@
   "aboutText2": "Věřím, že stav naší pokožky je zrcadlem našeho vnitřního zdraví a psychické pohody. Proto ke každému klientovi přistupuji s maximální citlivostí, respektem a individuální péčí přizpůsobenou konkrétním potřebám jeho těla i mysli.",
   "contactTitle": "Kontakt",
   "mapAddress": "Praha 2, Londýnská 11, Czech Republic",
-  "aboutText3": "Přijďte si dopřát chvíli péče do salonu v Poděbradech, kde zažijete hlubokou relaxaci obličejových svalů, oživíte povadlé fascie a podpoříte celkovou vitalitu organismu.",
+  "aboutText3": "Přijďte si dopřát chvíli péče do salonu v Praze nebo v Poděbradech, kde zažijete hlubokou relaxaci obličejových svalů, oživíte povadlé fascie a podpoříte celkovou vitalitu organismu.",
   "contactEmail": "renata.tomasova@seznam.cz",
   "whyDescription1": "Mladý obličej má pevné svaly, neporušené fascie, dobře fungující tok lymfy a pružné cévky. Čím jsme starší, tím větší podporu od nás naše pleť potřebuje.",
   "heroTitle": "Cesta k přirozené kráse, zdraví a harmonii",
@@ -68,7 +68,8 @@
       "title": "Pětice ošetření",
       "pricePerSession": 950,
       "note": "Doporučená kúra. Pět ošetření po sobě je minimum, u kterého je výsledek opravdu vidět.",
-      "highlight": true
+      "highlight": true,
+      "badge": "Zaváděcí cena"
     },
     {
       "count": 10,
@@ -76,5 +77,17 @@
       "pricePerSession": 850,
       "note": "Nejvýhodnější varianta pro pravidelnou péči po celý rok."
     }
-  ]
+  ],
+  "introOfferTitle": "Zaváděcí cena",
+  "introOfferLead": "60minutová masáž obličeje za 950 Kč místo běžných 1 200 Kč. Zaváděcí cenu dostanete, pokud pro vás platí alespoň jedna z těchto věcí:",
+  "introOfferPrice": 950,
+  "introOfferRegularPrice": 1200,
+  "introOfferConditions": [
+    "Jdete ke mně poprvé.",
+    "Doporučíte mě někomu, kdo na ošetření skutečně přijde.",
+    "Vezmete si balíček alespoň pěti ošetření."
+  ],
+  "introOfferUntil": "",
+  "introOfferNote": "Zaváděcí cenu uplatním při domluvě termínu – stačí se v rezervaci zmínit, která z podmínek pro vás platí.",
+  "contactAvailability": "Vždy po předchozí domluvě – pevná otevírací doba není, termín si domluvíme telefonicky nebo přes rezervační formulář."
 }

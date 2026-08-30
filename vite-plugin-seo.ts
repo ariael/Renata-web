@@ -155,7 +155,7 @@ function buildSeo(root: string) {
       : {})
   }
 
-  return { title, description, jsonLd }
+  return { title, description, jsonLd, voucherPackages }
 }
 
 export function seoFromCms(): Plugin {
@@ -165,12 +165,18 @@ export function seoFromCms(): Plugin {
       order: 'pre',
       handler(html, ctx) {
         const root = ctx.server?.config.root ?? process.cwd()
-        const { title, description, jsonLd } = buildSeo(root)
+        const { title, description, jsonLd, voucherPackages } = buildSeo(root)
 
         return html
           .replaceAll('%SEO_TITLE%', escapeAttr(title))
           .replaceAll('%SEO_DESCRIPTION%', escapeAttr(description))
           .replace('<!--%SEO_JSONLD%-->', `<script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2)}\n  </script>`)
+          // Interní generátor poukazů si bere ceník odsud, ať se nerozejde s webem.
+          .replaceAll('%VOUCHER_PACKAGES%', JSON.stringify(
+            Object.fromEntries(
+              voucherPackages.map((p) => [String(p.count), { count: Number(p.count), perSession: Number(p.pricePerSession) }])
+            )
+          ))
       }
     }
   }
