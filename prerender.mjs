@@ -70,9 +70,12 @@ for (const route of allRoutes()) {
     if (/\.[a-z0-9]{2,5}$/i.test(url)) referenced.add(url)
   }
 
-  const outDir = route.path === '/' ? dist : join(dist, route.path)
-  mkdirSync(outDir, { recursive: true })
-  writeFileSync(join(outDir, 'index.html'), html)
+  // Ploche soubory (`cenik.html`), ne adresare s index.html. Netlify na
+  // cistou adresu `/cenik` sam najde `cenik.html`; u adresare by cesta bez
+  // koncoveho lomitka propadla az na SPA fallback a vratila uvodni stranku.
+  const outFile = route.path === '/' ? join(dist, 'index.html') : join(dist, `${route.path}.html`)
+  mkdirSync(dirname(outFile), { recursive: true })
+  writeFileSync(outFile, html)
 
   const text = html
     .replace(/<script[\s\S]*?<\/script>/g, '')
