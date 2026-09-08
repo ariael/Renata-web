@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useSyncExternalStore } from 'react'
 import './App.css'
 import type { Service, HomepageSettings, VoucherPackage } from './fallbackData'
 import {
@@ -14,6 +14,19 @@ function localToday(): string {
   const offset = d.getTimezoneOffset() * 60000
   return new Date(d.getTime() - offset).toISOString().split('T')[0]
 }
+
+/**
+ * Hodnoty, které se liší při buildu a v prohlížeči, se čtou přes
+ * useSyncExternalStore: React vezme pro předrenderování serverový snímek
+ * a po hydrataci přepne na prohlížečový, aniž by se HTML rozešlo.
+ * Odběr je prázdný, protože se hodnota během života stránky nemění.
+ */
+const noSubscribe = () => () => {}
+
+const clientToday = () => localToday()
+const serverToday = () => ''
+const clientYear = () => new Date().getFullYear()
+const serverYear = () => __BUILD_YEAR__
 
 /** 4750 → „4 750 Kč" */
 function formatCzk(value: number): string {
@@ -152,13 +165,11 @@ export default function App() {
 
   // Dnešek doplní až prohlížeč. Při předrenderování by se uložil den buildu
   // a u návštěvníka o týden později by formulář nesmyslně blokoval termíny.
-  const [todayStr, setTodayStr] = useState('')
-  useEffect(() => setTodayStr(localToday()), [])
+  const todayStr = useSyncExternalStore(noSubscribe, clientToday, serverToday)
 
   // Rok v patičce: výchozí je rok buildu (stejný na serveru i v prohlížeči),
   // po hydrataci se srovná na skutečný.
-  const [year, setYear] = useState(__BUILD_YEAR__)
-  useEffect(() => setYear(new Date().getFullYear()), [])
+  const year = useSyncExternalStore(noSubscribe, clientYear, serverYear)
 
   // Cena jednoho ošetření bez balíčku – proti ní se počítá sleva u větších poukazů.
   const basePricePerSession =
