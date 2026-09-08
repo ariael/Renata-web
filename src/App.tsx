@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useRef, useSyncExternalStore } from 'react'
 import './App.css'
-import type { Service, HomepageSettings, VoucherPackage } from './fallbackData'
-import {
-  SERVICES_FALLBACK_DATA,
-  HOMEPAGE_SETTINGS_FALLBACK
-} from './fallbackData'
-import { fetchServices, fetchHomepageSettings } from './cmsClient'
+import type { Service, VoucherPackage } from './fallbackData'
+import { getServices, getHomepageSettings } from './cmsClient'
 import { LogoMark, LogoStacked } from './Logo'
 
 /** Dnešní datum v místní zóně (toISOString by vrátil UTC a večer by povolil včerejšek). */
@@ -46,11 +42,15 @@ function voucherServiceId(pkg: VoucherPackage): string {
   return `poukaz-${pkg.count}`
 }
 
+// Obsah z CMS se peče do bundlu při buildu, za běhu se nemění. Jako konstanty
+// je má k dispozici i předrenderování, takže robot dostane tentýž text jako
+// návštěvník – dřív se načítaly až v efektu a do HTML se dostala záložní data.
+const services = getServices()
+const settings = getHomepageSettings()
+
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeService, setActiveService] = useState<Service | null>(null)
-  const [services, setServices] = useState<Service[]>(SERVICES_FALLBACK_DATA)
-  const [settings, setSettings] = useState<HomepageSettings>(HOMEPAGE_SETTINGS_FALLBACK)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -66,17 +66,6 @@ export default function App() {
   const [isFormSending, setIsFormSending] = useState(false)
   const modalRef = useRef<HTMLDivElement>(null)
   const lastFocusedRef = useRef<HTMLElement | null>(null)
-
-  useEffect(() => {
-    async function loadCMSData() {
-      const cmsServices = await fetchServices()
-      setServices(cmsServices)
-      
-      const cmsSettings = await fetchHomepageSettings()
-      setSettings(cmsSettings)
-    }
-    loadCMSData()
-  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -104,7 +93,7 @@ export default function App() {
     return () => {
       revealElements.forEach((el) => observer.unobserve(el))
     }
-  }, [services, settings])
+  }, [])
 
   // Modální okno: zamknout scroll, přesunout fokus dovnitř, držet ho uvnitř
   // a po zavření ho vrátit na tlačítko, ze kterého se okno otevřelo.

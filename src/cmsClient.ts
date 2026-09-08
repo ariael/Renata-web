@@ -84,7 +84,12 @@ export function getServiceImageUrl(serviceId: string, imageVal: string): string 
   return fallback ? fallback.image : imageVal
 }
 
-export async function fetchServices(): Promise<Service[]> {
+/**
+ * Sluzby z CMS. Cte staticky importovane JSON soubory, takze je synchronni –
+ * diky tomu je stejna data dostane i predrenderovani pri buildu, ne az
+ * prohlizec. Kdyby se nacitala az v efektu, videl by robot jen zalozni data.
+ */
+export function getServices(): Service[] {
   try {
     const servicesList: Service[] = []
     
@@ -126,7 +131,8 @@ export async function fetchServices(): Promise<Service[]> {
   }
 }
 
-export async function fetchHomepageSettings(): Promise<HomepageSettings> {
+/** Nastaveni webu z CMS. Synchronni ze stejneho duvodu jako getServices(). */
+export function getHomepageSettings(): HomepageSettings {
   try {
     const item = settingsJson as RawRecord
 
