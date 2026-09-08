@@ -150,7 +150,15 @@ export default function App() {
     }
   }, [isMenuOpen])
 
-  const todayStr = localToday()
+  // Dnešek doplní až prohlížeč. Při předrenderování by se uložil den buildu
+  // a u návštěvníka o týden později by formulář nesmyslně blokoval termíny.
+  const [todayStr, setTodayStr] = useState('')
+  useEffect(() => setTodayStr(localToday()), [])
+
+  // Rok v patičce: výchozí je rok buildu (stejný na serveru i v prohlížeči),
+  // po hydrataci se srovná na skutečný.
+  const [year, setYear] = useState(__BUILD_YEAR__)
+  useEffect(() => setYear(new Date().getFullYear()), [])
 
   // Cena jednoho ošetření bez balíčku – proti ní se počítá sleva u větších poukazů.
   const basePricePerSession =
@@ -806,7 +814,7 @@ export default function App() {
                       id="date"
                       name="date"
                       required={!isVoucherSelected}
-                      min={todayStr}
+                      min={todayStr || undefined}
                       className="form-control"
                       value={formData.date}
                       onChange={handleInputChange}
@@ -896,7 +904,7 @@ export default function App() {
             <li><a href="#kontakt">Kontakt</a></li>
           </ul>
           <div className="footer-copy">
-            &copy; {new Date().getFullYear()} NatureLift.help. Všechna práva vyhrazena. 
+            &copy; {year} NatureLift.help. Všechna práva vyhrazena. 
             <br />
             <span style={{ fontSize: '0.75rem', opacity: 0.6, marginTop: '0.5rem', display: 'block' }}>
               {settings.footerNote}
