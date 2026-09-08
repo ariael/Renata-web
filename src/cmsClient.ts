@@ -1,4 +1,4 @@
-import type { Service, HomepageSettings, VoucherPackage } from './fallbackData'
+import type { Service, HomepageSettings, VoucherPackage, SiteLocation } from './fallbackData'
 import { 
   SERVICES_FALLBACK_DATA, 
   HOMEPAGE_SETTINGS_FALLBACK 
@@ -153,6 +153,22 @@ export function getHomepageSettings(): HomepageSettings {
 
     const packages = parseVoucherPackages(item.voucherPackages ?? item.voucher_packages)
     if (packages.length > 0) settings.voucherPackages = packages
+
+    if (Array.isArray(item.locations)) {
+      const locations = item.locations.flatMap((raw): SiteLocation[] => {
+        if (!raw || typeof raw !== 'object') return []
+        const loc = raw as RawRecord
+        const city = text(loc, 'city')
+        if (!city) return []
+        return [{
+          name: text(loc, 'name') ?? '',
+          street: text(loc, 'street') ?? '',
+          city,
+          region: text(loc, 'region') ?? ''
+        }]
+      })
+      if (locations.length > 0) settings.locations = locations
+    }
 
     settings.introOfferPrice = number(item.introOfferPrice) ?? HOMEPAGE_SETTINGS_FALLBACK.introOfferPrice
     settings.introOfferRegularPrice =

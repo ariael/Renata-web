@@ -1470,3 +1470,59 @@ textarea:focus-visible {
   color: var(--text-secondary);
   font-weight: 400;
 }
+
+/* ===== Rozcestník v patičce ===== */
+.footer-sitemap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 2rem 2.5rem;
+  width: 100%;
+  max-width: 900px;
+  margin: 2.5rem auto 0;
+  padding: 2rem 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+}
+
+.footer-sitemap-title {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+  color: var(--accent);
+  margin: 0 0 0.9rem;
+}
+
+.footer-sitemap-col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.footer-sitemap-col a {
+  font-size: 0.9rem;
+  opacity: 0.75;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.footer-sitemap-col a:hover,
+.footer-sitemap-col a:focus-visible {
+  opacity: 1;
+  color: var(--accent);
+}
+
+@media (max-width: 600px) {
+  .footer-sitemap {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    text-align: center;
+  }
+
+  .footer-sitemap-col ul {
+    align-items: center;
+  }
+}

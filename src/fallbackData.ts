@@ -17,6 +17,14 @@ export interface Service {
   sortOrder?: number
 }
 
+/** Provozovna – z ni vychazi mapa, strukturovana data i stranky poboctek. */
+export interface SiteLocation {
+  name: string
+  street: string
+  city: string
+  region: string
+}
+
 export interface VoucherPackage {
   /** Text štítku nad kartou; když chybí, použije se výchozí. */
   badge?: string
@@ -68,6 +76,7 @@ export interface HomepageSettings {
   aboutBadgeTitle: string
   aboutBadgeText: string
   footerNote: string
+  locations: SiteLocation[]
   seoTitle: string
   seoDescription: string
   vouchersTitle: string
@@ -204,6 +213,10 @@ export const HOMEPAGE_SETTINGS_FALLBACK: HomepageSettings = {
   aboutBadgeTitle: 'TCM',
   aboutBadgeText: 'Tradiční čínské metody',
   footerNote: 'Inspirováno tradiční čínskou medicínou a péčí o zdraví.',
+  locations: [
+    { name: 'NatureLift Praha', street: 'Londýnská 11', city: 'Praha 2', region: 'Praha' },
+    { name: 'NatureLift Poděbrady', street: 'U Vlečky 49', city: 'Poděbrady', region: 'Středočeský kraj' }
+  ],
   seoTitle: 'NatureLift | Přirozený lifting obličeje a TCM',
   seoDescription: 'NatureLift – přirozený lifting obličeje Gua Sha, baňkováním, bukálními masážemi a aurikuloterapií. Omlazení a hluboké uvolnění inspirované tradiční čínskou medicínou.',
   vouchersTitle: 'Dárkové poukazy',
