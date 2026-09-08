@@ -2,10 +2,10 @@
   command = "npm run build"
   publish = "dist"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# SPA fallback tu byl, dokud web tvorila jedina adresa. Ted ma kazda stranka
+# vlastni soubor, takze by pravidlo jen vracelo uvodni stranku se stavem 200
+# na kazdy preklep - vyhledavac by si takovou adresu ulozil jako platnou.
+# Neznamou cestu proto obslouzi dist/404.html se spravnym stavovym kodem.
 
 # Build výstup (/build/*) má hash v názvu – může se cachovat natrvalo.
 [[headers]]

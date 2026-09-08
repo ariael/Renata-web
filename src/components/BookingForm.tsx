@@ -112,7 +112,7 @@ export default function BookingForm({
   }
 
   return (
-    <div id="rezervace" className="booking-form reveal reveal-right">
+    <div id="rezervace" className="booking-form">
       <h2 className="booking-form-title">{settings.bookingTitle}</h2>
 
       {isFormSending && (

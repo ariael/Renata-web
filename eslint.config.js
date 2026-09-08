@@ -19,4 +19,13 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  {
+    // entry-server.tsx se v prohlizeci nikdy nenacte - bezi jen pri buildu,
+    // kde se z nej vykresluje HTML. Pravidlo o Fast Refreshi na nej neplati
+    // a vedlejsi exporty (seznam adres, strukturovana data) sem patri.
+    files: ['src/entry-server.tsx'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
+  },
 ])

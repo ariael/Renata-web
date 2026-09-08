@@ -493,7 +493,9 @@ export default function App() {
             </div>
 
             {/* Booking Form */}
-            <BookingForm service={bookedService} onServiceChange={setBookedService} />
+            <div className="reveal reveal-right">
+              <BookingForm service={bookedService} onServiceChange={setBookedService} />
+            </div>
           </div>
 
           {/* Map Embed - dynamická adresa z CMS */}
